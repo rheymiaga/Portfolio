@@ -1,96 +1,103 @@
-import { NavLink } from "react-router-dom"
-import { NavBarTemplate } from "./NavBarTemplate/NavBarTemplate"
-import { useState } from "react"
-import { DiCode } from "react-icons/di"
-import { FaCode } from "react-icons/fa"
+import { NavLink } from "react-router-dom";
+import { NavLinks } from "./NavLinks/NavLinks";
+import { useState } from "react";
+
 
 export const NavBar = () => {
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleScroll = (anchor: string) => {
+        const id = anchor.replace("#", "");
+        const el = document.getElementById(id);
+        if (el) {
+            el.scrollIntoView({ behavior: "smooth" });
+        }
+        setIsOpen(false);
+    };
 
     return (
-        <nav className="p-4">
+        <>
+            <nav className="font-Poppins sm:ml-2 md:ml-4 font-medium flex items-center space-x-2 transition-colors duration-500 ease-in-out">
 
-            {/*Desktop NavBar*/}
-            <ul className="md:flex items-center gap-3 hidden">
-                {NavBarTemplate.map((link) => (
+                {/*Desktop navbar */}
+                {NavLinks.map((link) => (
                     <NavLink
                         key={link.anchor}
                         to={link.anchor}
-                        className={({ isActive }) =>
-                            `group relative flex items-center text-lg md:text-2xl 
-               text-amber-100 transition-all duration-300 scroll-smooth
-               ${isActive
-                                ? "scale-105 brightness-105"
-                                : "hover:scale-105 hover:brightness-105"
-                            }`
-                        }
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handleScroll(link.anchor);
+                        }}
+                        className={`hidden md:flex items-center `}
                     >
-                        <button className="items-center flex rounded-2xl p-3">
-                            <span className="mr-2 text-lg sm:text-xl md:text-2xl lg:text-3xl transition-transform duration-300 group-hover:rotate-15">
-                                {link.icon}
-                            </span>
-                            <span className="text-lg md:text-xl lg:text-2xl relative transition-all duration-300 group-hover:scale-105 group-hover:brightness-110">
-                                {link.label}
+                        <div className="group p-2 rounded-2xl flex justify-center w-full transition-all duration-300 ease-in-out dark:text-amber-50 hover:scale-105">
+                            <span className="group-hover:rotate-12 transition-transform duration-300 ease-in-out">{link.icon}</span>
+                            <span className=" group-hover:opacity-80 transition-all duration-300 ease-in-out">{link.label}</span>
+                        </div>
 
-                                <span
-                                    className="absolute -bottom-1 left-0 h-0.5 w-0 bg-linear-to-r from-transparent via-purple-300 to-transparent 
-                           transition-all duration-300 opacity-0 group-hover:w-full group-hover:opacity-100"
-                                />
-                            </span>
-                        </button>
                     </NavLink>
                 ))}
-            </ul>
-            {/*Mobile NavBar*/}
-            <div className="flex md:hidden items-center overflow-x-scroll">
+                {/*Mobile navbar */}
 
-                <h1 className={`md:hidden absolute left-1/6 text-xl sm:text-2xl transition-all duration-300  text-white
-                    font-serif text-shadow-lg text-shadow-black ${isOpen ? 'opacity-0' : 'opacity-100'}`}>Rhey Louie Miaga
-                </h1>
-                <span className={`w-0 h-0.5 bottom-1/4 animate-pulse right-0 absolute bg-linear-to-l from-transparent via-lime-300 to-purple-300 transition-all duration-700 ${isOpen ? 'w-xs' : 'w-0'}`}></span>
-
-                <button
-                    className="text-purple-500 hover:text-purple-300 flex items-center focus:outline-none transition-all p-2
-                     rounded-xl border-slate-900/30 hover:border-slate-600/50 relative backdrop-blur-xl shadow-md shadow-purple-900/20 hover:shadow-lg hover:shadow-purple-500/30"
-                    onClick={() => setIsOpen(!isOpen)}
-                >
-                    <div className="space-y-2 relative ">
-                        <span
-                            className={`block w-6 h-0.5 bg-linear-to-r transition-all duration-700 ${isOpen ? "-rotate-45 translate-y-0 from-transparent via-purple-400 to-transparent w-6" : "from-slate-400 via-gray-200 to-purple-200 w-0"}`} />
-                        <span
-                            className={`block w-6 h-0.5 bg-slate-400 bg-linear-to-r transition-al duration-300 ${isOpen ? "opacity-0" : "from-slate-400 via-gray-200 to-purple-200"}`} />
-                        <span
-                            className={`block w-6 h-0.5 bg-linear-to-r transition-all duration-700 ${isOpen ? "rotate-45 -translate-y-1 from-transparent via-purple-400 to-transparent w-6" : "from-slate-400 via-gray-200 to-purple-200 w-0"}`} />
-
-                    </div>
-
-
-                </button>
-                {
-                    isOpen && (
-                        <ul className="flex items-center space-x-2 md:hidden relative transition-all duration-500">
-
-                            {NavBarTemplate.map((link) => (
-                                <NavLink
-                                    key={link.anchor}
-                                    to={link.anchor}
-                                    onClick={() => setIsOpen(false)}
-                                    className={({ isActive }) => `p-2 rounded-2xl scroll-smooth relative items-center transition-all
-                                     duration-300 ${isActive ? 'brightness-105' : 'brightness-100'}`}
-                                >
-
-                                    <span className="text-amber-100 flex relative rounded-2xl text-shadow-black text-shadow-sm ">
+                <div className={`absolute  md:hidden top-14 sm:top-16 z-10 p-2 transform transition-all duration-500 ease-in-out
+                 ${isOpen ? '-left-4 sm:-left-5 opacity-100' : 'opacity-0 left-32'}`} >
+                    <div className="flex flex-col space-y-2">
+                        {NavLinks.map((link) => (
+                            <NavLink
+                                key={link.anchor}
+                                to={link.anchor}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    handleScroll(link.anchor);
+                                }}
+                                className={`inline md:hidden backdrop-blur-xs items-center rounded-l-lg`}
+                            >
+                                <div className="relative flex p-2 rounded-l-lg z-10 bg-linear-to-r from-white transform transition-all duration-500 dark:from-slate-700 to-transparent">
+                                    <div className={`absolute bottom-1 -right-3 transform transition-all duration-1000 h-0.5 ${isOpen ? 'w-full opacity-90' : 'w-0 opacity-0'} from-white bg-linear-to-r dark:from-slate-100`}></div>
+                                    <span className="text-gray-800 dark:text-blue-100">
                                         {link.icon}
-                                        {link.label}
-                                        <div className="absolute -inset-2 bg-purple-300/10 rounded-full blur-sm"></div>
                                     </span>
-                                </NavLink>
-                            ))}
-                        </ul>
-                    )
-                }
+                                    <span className="text-gray-900 dark:text-blue-100">
+                                        {link.label}
+                                    </span>
+                                </div>
 
-            </div >
-        </nav >
-    )
-}
+                            </NavLink>
+
+                        ))}
+                    </div>
+                </div>
+                <div
+                    className="items-center relative flex shrink-0 md:hidden">
+
+                    <button
+                        className={`transition-all p-3 flex shrink-0 rounded-xl relative dark:bg-linear-to-r bg-[#FAF0E6]/80 drop-shadow-sm dark:from-blue-600/15
+                     dark:to-cyan-500/30 overflow-hidden dark:bg-amber-900/15 backdrop-blur-xl border-2 border-white dark:border-gray-50/80 
+                     items-center justify-center dark:text-amber-50 transform ${isOpen ? 'shadow-md scale-100 dark:shadow-gray-800/80' : 'shadow-none scale-95'}`}
+                        onClick={() => setIsOpen(!isOpen)}
+                    >
+                        <div className="space-y-2 relative">
+                            <span
+                                className={`block w-6 h-0.5 bg-current transition-all ${isOpen ? "-rotate-45 translate-y-2.5" : ""
+                                    }`}
+                            />
+                            <span
+                                className={`block w-6 h-0.5 bg-current transition-all ${isOpen ? "opacity-0" : ""
+                                    }`}
+                            />
+                            <span
+                                className={`block w-6 h-0.5 bg-current transition-all ${isOpen ? "rotate-45 -translate-y-1.75" : ""
+                                    }`}
+                            />
+
+                        </div>
+
+
+                    </button>
+
+
+                </div>
+            </nav >
+        </>
+    );
+};

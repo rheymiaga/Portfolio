@@ -1,24 +1,36 @@
-import { BiCodeCurly, } from "react-icons/bi"
 import { NavBar } from "../NavBar/NavBar"
+import { ThemeToggle } from "../../ThemeToggle/ThemeToggle"
+import { NavBarLabels } from "../NavBar/NavbarLabels/NavBarLabels"
 
 export const Header = () => {
-    // ⟩⟨
-    return (
-        <header className="bg-black overflow-hidden relative">
 
-            <div className="flex relative items-center justify-between w-full px-4 py-2 sm:px-10 md:py-6 transition-all duration-300 bg-linear-to-tl from-transparent via-gray-900/60 to-transparent">
-                <BiCodeCurly className="text-purple-300/20 animate-pulse duration-500 text-7xl sm:text-8xl lg:text-9xl rotate-90 absolute -left-8 sm:-left-11 lg:-left-16" />
-                <BiCodeCurly className="text-purple-300/20 animate-pulse duration-500 text-7xl sm:text-8xl lg:text-9xl rotate-90 absolute -right-8 sm:-right-11 lg:-right-16" />
-                <div className="flex items-center relative group">
-                    <div className="absolute -inset-4 bg-purple-300/20 opacity-0
-                    group-hover:opacity-100 transition-opacity duration-300 rounded-full blur-xl"></div>
-                    <h1 className="ml-4 md:ml-8 hidden md:inline transition-all duration-300 text-2xl sm:text-3xl md:text-4xl text-white
-                    font-serif text-shadow-lg text-shadow-black truncate text-nowrap">Rhey Louie Miaga
-                    </h1>
-                    
-                </div>
-                <NavBar />
+    return (
+        <>
+            <div className="relative z-50">
+                <NavBarLabels />
             </div>
-        </header>
+            <div className="fixed z-50 top-0 md:left-1/2 overflow-hidden transform transition-all duration-500 ease-in md:-translate-x-1/2 w-full flex items-center justify-end md:max-w-2xl px-3 py-4 sm:py-5 md:py-6">
+                {/*Desktop Header*/}
+                <header className="hidden md:flex dark:bg-linear-to-r bg-[#FAF0E6]/80 drop-shadow-sm dark:from-blue-600/15 dark:to-cyan-500/30 overflow-hidden dark:bg-amber-900/15 backdrop-blur-xl border-2 border-white dark:border-gray-50/80 rounded-3xl items-center justify-center w-full ">
+                    <div className="flex items-center gap-2 p-2 sm:p-3 justify-between w-full rounded-2xl navbar-scroll overflow-x-auto overflow-y-hidden">
+
+                        <div className="flex items-center gap-2 mx-auto md:w-full md:justify-between transition-all duration-300 ease-in-out">
+                            <NavBar />
+                            <ThemeToggle />
+                        </div>
+
+                    </div>
+
+                </header>
+                {/*Desktop Header*/}
+                <header className="flex md:hidden gap-2 justify-center items-center relative">
+                    <ThemeToggle />
+                    <NavBar />
+
+                </header >
+
+
+            </div >
+        </>
     )
 }

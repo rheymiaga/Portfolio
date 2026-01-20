@@ -1,10 +1,14 @@
-import { Main } from "./components/Main/Main"
-
+// App.tsx
+import { Header } from "./components/Header/Header"
+import { PortFolioSections } from "./features/PortFolioSections"
 
 function App() {
+
+
   return (
     <>
-      <Main />
+      <Header />
+      <PortFolioSections />
     </>
   )
 }
