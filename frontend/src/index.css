@@ -28,6 +28,25 @@ button {
     mask-size: cover;
 }
 
+/*Mask bottom*/
+.mask-bottom {
+    -webkit-mask-image: linear-gradient(to bottom,
+            transparent 0%,
+            white 10%,
+            white 90%,
+            transparent 100%);
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: cover;
+
+    mask-image: linear-gradient(to bottom,
+            transparent 0%,
+            white 10%,
+            white 90%,
+            transparent 100%);
+    mask-repeat: no-repeat;
+    mask-size: cover;
+}
+
 /*Fonts*/
 .cinzel {
     font-family: 'Cinzel', serif;
