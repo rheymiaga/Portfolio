@@ -112,7 +112,7 @@ export const allProjects: ProjectCardProps[] = [
             "A full-stack auction app for online bidding, developed as an academic project. Deployed on Render with a Neon-backed PostgreSQL database."
     },
     {
-        title: "YanYan Electrical Shop",
+        title: "Electrical Shop",
         teamType: "Solo",
         repoLink: "https://github.com/rheymiaga/YanYan",
         pageLink: "https://rheymiaga.github.io/YanYan",

@@ -18,10 +18,10 @@ export const ProjectCard = ({ project }: { project: ProjectCardProps }) => {
             viewport={{ once: false, amount: 0.2 }}
             className="bg-white/10 rounded-lg relative overflow-hidden"
         >
-            <div className="flex mask-bottom overflow-hidden h-96 hover:scale-102 transition-all duration-300 justify-center rounded-lg p-2 gap-2">
+            <div className="flex mask-bottom overflow-hidden h-72 sm:h-80 md:h-96 hover:scale-102 transition-all duration-300 justify-center rounded-lg p-2 gap-2">
                 <img loading="lazy"
                     className={`${shownProject === "mobileImage"
-                        ? "opacity-100 scale-100 absolute top-0 right-1/2 translate-x-1/2 h-96 z-0"
+                        ? "opacity-100 scale-100 absolute top-0 right-1/2 translate-x-1/2 h-72 sm:h-80 md:h-96 z-0"
                         : "opacity-0 scale-80 -z-10"
                         } ${shownProject === "allImages" ? "opacity-100 scale-100 z-0" : "scale-80 opacity-0"}
             transition-all duration-500 transform rounded-lg flex shrink-0`}
@@ -31,7 +31,7 @@ export const ProjectCard = ({ project }: { project: ProjectCardProps }) => {
                 <div className="flex flex-col gap-2">
                     <img loading="lazy"
                         className={`flex-1 flex shrink-0 h-48 transition-all duration-500 transform rounded-lg ${shownProject === "desktopImage"
-                            ? "opacity-100 scale-100 absolute object-contain top-0 left-1/2 -translate-x-1/2 h-96 z-0"
+                            ? "opacity-100 scale-100 absolute object-contain top-0 left-1/2 -translate-x-1/2 h-72 sm:h-80 md:h-96 z-0"
                             : "opacity-0 scale-80 -z-10"
                             } ${shownProject === "allImages" ? "opacity-100 scale-100 z-0" : "scale-80 opacity-0"}`}
                         src={project.desktopImg}
@@ -41,7 +41,7 @@ export const ProjectCard = ({ project }: { project: ProjectCardProps }) => {
                     <div
                         className={`flex-1 space-y-6 overflow-y-scroll rounded-lg border max-w-sm border-neutral-800/50 backdrop-blur-xl transition-all duration-700 ease-in-out 
                             ${shownProject === "usedTechStack"
-                                ? "max-w-xl w-full py-10 opacity-100 scale-100 absolute top-0 left-1/2 -translate-x-1/2 h-full max-h-96 z-10 bg-neutral-900/80"
+                                ? "max-w-xl w-full py-10 opacity-100 scale-100 absolute top-0 left-1/2 -translate-x-1/2 h-72 sm:h-80 md:h-96 z-10 bg-neutral-900/80"
                                 : "opacity-0 scale-95 -z-10 bg-neutral-900/40"} 
                                 ${shownProject === "allImages" ? "opacity-100 scale-100 z-0" : "scale-80 opacity-0"} text-white p-4`}>
                         <div
