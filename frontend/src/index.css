@@ -32,16 +32,16 @@ button {
 .mask-bottom {
     -webkit-mask-image: linear-gradient(to bottom,
             transparent 0%,
-            white 10%,
-            white 90%,
+            white 20%,
+            white 80%,
             transparent 100%);
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-size: cover;
 
     mask-image: linear-gradient(to bottom,
             transparent 0%,
-            white 10%,
-            white 90%,
+            white 20%,
+            white 80%,
             transparent 100%);
     mask-repeat: no-repeat;
     mask-size: cover;
@@ -64,3 +64,26 @@ button {
 /*Cinzel => headings/titles/ui*/
 /*poppins  => sections/infos*/
 /*Cormorant => for quotes*/
+
+/* scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 8px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #111;
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #333;
+}
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #111 transparent;
+}
