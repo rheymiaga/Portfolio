@@ -4,6 +4,7 @@ import { SocialLinks } from "../../ui/SocialLinks";
 import { heroVariants } from '../../../animations/Variants';
 
 
+
 export const HeroSection = () => {
 
 
@@ -13,7 +14,8 @@ export const HeroSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
             viewport={{ once: false }}
-            className="relative min-h-screen flex items-center justify-center flex-col text-white p-3">
+            className="relative min-h-screen flex items-center justify-center flex-col text-white px-3">
+
             <div
                 className="absolute text-base top-5 left-5 sm:left-10 opacity-70 flex shrink-0 items-center cormorant">
                 <IoLocation className="flex shrink-0" />
@@ -37,11 +39,13 @@ export const HeroSection = () => {
                     </p>
                     <p className="text-center brightness-110 cormorant italic
                     transition-all duration-300 ease-in-out tracking-widest text-base sm:text-2xl font-extralight">
-                        I specialize in minimalist UI/UX design, building user‑friendly projects that emphasize clean and modern experiences.
+                        I specialize in minimalist UI/UX design, creating user‑friendly interfaces that combine modern aesthetics with
+                        precise attention to detail. My focus is on delivering clean, intuitive experiences that enhance usability and engagement.
                     </p>
                 </div>
                 <SocialLinks />
             </motion.div>
+
         </motion.div >
     )
 }

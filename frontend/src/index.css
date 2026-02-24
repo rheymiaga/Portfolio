@@ -32,16 +32,16 @@ button {
 .mask-bottom {
     -webkit-mask-image: linear-gradient(to bottom,
             transparent 0%,
-            white 20%,
-            white 80%,
+            white 10%,
+            white 90%,
             transparent 100%);
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-size: cover;
 
     mask-image: linear-gradient(to bottom,
             transparent 0%,
-            white 20%,
-            white 80%,
+            white 10%,
+            white 90%,
             transparent 100%);
     mask-repeat: no-repeat;
     mask-size: cover;
@@ -83,6 +83,7 @@ button {
 ::-webkit-scrollbar-thumb:hover {
     background: #333;
 }
+
 * {
     scrollbar-width: thin;
     scrollbar-color: #111 transparent;
