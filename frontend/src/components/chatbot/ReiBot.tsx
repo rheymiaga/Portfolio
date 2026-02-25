@@ -21,7 +21,7 @@ export const ReiBot = () => {
             </div>
 
             {openChat && (
-                <div className="fixed bottom-24 right-10 bg-neutral-800/90 backdrop-blur-md border border-white/30 rounded-lg shadow-xl w-80 h-96 flex flex-col z-40">
+                <div className="fixed bottom-24 right-1/2 translate-x-1/2 sm:right-10 sm:translate-0 bg-neutral-800/90 backdrop-blur-md border border-white/30 rounded-lg shadow-xl w-80 h-96 flex flex-col z-40">
                     <header className="flex items-center justify-between px-3 py-2 bg-black/80 border-b border-white/30 rounded-t-lg">
                         <div className="flex items-center gap-2 text-white">
                             <span className="w-2 h-2 bg-green-500 animate-pulse rounded-full"></span>

@@ -13,6 +13,8 @@ import { SiExpress, SiRender } from "react-icons/si";
 import { FaDatabase } from "react-icons/fa";
 import { FaGithubSquare } from "react-icons/fa";
 import { IoLogoCss3 } from "react-icons/io5";
+import { HiAcademicCap } from "react-icons/hi2";
+import { MdWork } from "react-icons/md";
 
 import AuctionXpressMobile from "../../../assets/images/AuctionXpressMobile.png";
 import AuctionXpressDesktop from "../../../assets/images/AuctionXpressDesktop.png";
@@ -71,6 +73,53 @@ export const projectLinks: ProjectLinkProps[] = [
     { name: "Code", icon: <PiGithubLogoFill /> },
     { name: "Visit", icon: <LuExternalLink /> },
 ];
+
+export interface HistoryItem {
+    title: string;
+    year: string | number;
+    description: string;
+
+}
+
+export interface HistoryCategory {
+    category: string;
+    icon: React.ReactNode;
+    items: HistoryItem[];
+}
+
+export const History: HistoryCategory[] = [
+    {
+        category: "Academic History",
+        icon: <HiAcademicCap />,
+        items: [
+            {
+                title: "College",
+                year: "Present",
+                description: "BS Information Technology",
+
+            },
+            {
+                title: "Senior High School",
+                year: "2021 – 2023",
+                description: "ICT Strand",
+            },
+
+        ]
+    },
+    {
+        category: "Career Path",
+        icon: <MdWork />,
+        items: [
+            {
+                title: "Software Engineer",
+                year: "Post-Graduation",
+                description: "Future Goal",
+            }
+        ]
+    }
+
+];
+
 
 export const allProjects: ProjectCardProps[] = [
     {

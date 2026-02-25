@@ -23,7 +23,7 @@ const socialLinks: linksProps[] = [
 export const SocialLinks = () => {
 
     return (
-        <div className="flex items-center gap-4 p-2 relative justify-center">
+        <div className="flex flex-wrap justify-between items-center gap-2 p-2">
 
             {socialLinks.map((link) => (
                 <a className="poppins" target="_blank"
