@@ -16,9 +16,9 @@ export const ProjectCard = ({ project }: { project: ProjectCardProps }) => {
             whileInView="visible"
             exit="exit"
             viewport={{ once: false, amount: 0.2 }}
-            className="rounded-lg shadow-[1px_1px_8px] p-0.5 bg-linear-to-r from-black/10 via-neutral-400 to-black/10">
+            className="rounded-lg shadow-[1px_1px_8px] p-0.5 bg-linear-to-r from-neutral-700 via-neutral-400 to-neutral-700 ">
             <div className="border bg-neutral-800 brightness-110  relative rounded-lg overflow-hidden border-neutral-600">
-                <div className="flex mask-bottom overflow-hidden h-72 sm:h-80 md:h-96 hover:scale-102 transition-all duration-300 justify-center rounded-lg p-2 gap-2">
+                <div className="flex mask-bottom overflow-hidden h-72 sm:h-108 md:h-144 hover:scale-102 transition-all duration-300 justify-center rounded-lg p-2 gap-2">
                     {project.mobileVid && shownProject === "mobileImage" ? (
                         <video
                             src={project.mobileVid}
@@ -26,13 +26,13 @@ export const ProjectCard = ({ project }: { project: ProjectCardProps }) => {
                             loop
                             muted
                             playsInline
-                            className="opacity-100 scale-100 absolute top-0 right-1/2 translate-x-1/2 h-72 sm:h-80 md:h-96 z-0 rounded-lg"
+                            className="opacity-100 scale-100 absolute top-0 right-1/2 translate-x-1/2 h-72 sm:h-108 md:h-144 z-0 rounded-lg"
                         />
                     ) : (
                         <img
                             loading="lazy"
                             className={`${shownProject === "mobileImage"
-                                ? "opacity-100 scale-100 absolute top-0 right-1/2 translate-x-1/2 h-72 sm:h-80 md:h-96 z-0"
+                                ? "opacity-100 scale-100 absolute top-0 right-1/2 translate-x-1/2 h-72 sm:h-108 md:h-144 z-0"
                                 : "opacity-0 scale-80 -z-10"} 
                             ${shownProject === "allImages" ? "opacity-100 scale-100 z-0" : "scale-80 opacity-0"} 
                             transition-all duration-500 transform rounded-lg flex shrink-0`}
@@ -43,19 +43,20 @@ export const ProjectCard = ({ project }: { project: ProjectCardProps }) => {
 
                     <div className="flex flex-col gap-2">
                         {project.desktopVid && shownProject === "desktopImage" ? (
+
                             <video
                                 src={project.desktopVid}
                                 autoPlay
                                 loop
                                 muted
                                 playsInline
-                                className="flex-1 flex shrink-0 transition-all duration-500 transform rounded-lg opacity-100 scale-100 absolute object-contain top-0 left-1/2 -translate-x-1/2 h-72 sm:h-80 md:h-96 z-0"
+                                className="flex-1 flex shrink-0 transition-all duration-500 transform rounded-lg opacity-100 scale-100 absolute object-contain top-0 left-1/2 -translate-x-1/2 h-72 sm:h-108 md:h-144 z-0"
                             />
                         ) : (
                             <img
                                 loading="lazy"
                                 className={`flex-1 flex shrink-0 h-48 transition-all duration-500 transform rounded-lg ${shownProject === "desktopImage"
-                                    ? "opacity-100 scale-100 absolute object-contain top-0 left-1/2 -translate-x-1/2 h-72 sm:h-80 md:h-96 z-0"
+                                    ? "opacity-100 scale-100 absolute object-contain top-0 left-1/2 -translate-x-1/2 h-72 sm:h-108 md:h-144 z-0"
                                     : "opacity-0 scale-80 -z-10"} 
                                 ${shownProject === "allImages" ? "opacity-100 scale-100 z-0" : "scale-80 opacity-0"}`}
                                 src={project.desktopImg}
@@ -65,15 +66,15 @@ export const ProjectCard = ({ project }: { project: ProjectCardProps }) => {
 
 
                         <div
-                            className={`flex-1 space-y-6 overflow-y-scroll rounded-lg border max-w-sm border-neutral-800/50 backdrop-blur-xl transition-all duration-700 ease-in-out 
+                            className={`flex-1 space-y-6 overflow-y-scroll rounded-lg border max-w-lg border-neutral-800/50 backdrop-blur-xl transition-all duration-700 ease-in-out 
                             ${shownProject === "usedTechStack"
-                                    ? "max-w-xl w-full py-10 opacity-100 scale-100 absolute top-0 left-1/2 -translate-x-1/2 h-72 sm:h-80 md:h-96 z-10 bg-neutral-900/80"
+                                    ? "max-w-xl w-full py-10 opacity-100 scale-100 absolute top-0 left-1/2 -translate-x-1/2 h-72 sm:h-108 md:h-144 z-10 bg-neutral-900/80"
                                     : "opacity-0 scale-95 -z-10 bg-neutral-900/40"} 
-                                ${shownProject === "allImages" ? "opacity-100 scale-100 z-0" : "scale-80 opacity-0"} text-white p-4`}>
+                                ${shownProject === "allImages" ? "opacity-100 scale-100 z-0 pb-4" : "scale-80 opacity-0 pb-20"} text-white p-4`}>
                             <div
                                 className={`poppins flex flex-wrap gap-2 items-center justify-between transition-all duration-500 ease-in-out 
                                 ${shownProject === "usedTechStack"
-                                        ? "text-base font-semibold border-b border-white/10 pb-2 mb-4 tracking-wide"
+                                        ? "text-base font-semibold border-b border-white/10 pb-4 mb-4 tracking-wide"
                                         : "text-sm font-medium opacity-60 mb-2"}`}
                             >
                                 <h1 className="truncate">{project.title}</h1>
@@ -92,7 +93,7 @@ export const ProjectCard = ({ project }: { project: ProjectCardProps }) => {
 
                             <p
                                 className={`poppins transition-all duration-500 ease-in-out 
-                                ${shownProject === "usedTechStack" ? "opacity-90 text-sm" : "opacity-60 text-xs"}`}>
+                                ${shownProject === "usedTechStack" ? "opacity-90 text-base" : "opacity-60 text-xs"}`}>
                                 {project.description}
                             </p>
 

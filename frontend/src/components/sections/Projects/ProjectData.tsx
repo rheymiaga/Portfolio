@@ -89,13 +89,13 @@ export interface HistoryCategory {
 
 export const History: HistoryCategory[] = [
     {
-        category: "Academic History",
+        category: "Education",
         icon: <HiAcademicCap />,
         items: [
             {
                 title: "College",
                 year: "Present",
-                description: "BS Information Technology",
+                description: "B.S. Information Technology",
 
             },
             {
