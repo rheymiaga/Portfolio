@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { techStack } from './TechStackData';
 import { IoChevronDown } from 'react-icons/io5';
-import { containerVariants, itemVariants, sectionVariants } from '../../../animations/Variants';
+import { cardVariants, containerVariants, itemVariants, sectionVariants } from '../../../animations/Variants';
 
 export const TechStackSection = () => {
     const [filter, setFilter] = useState<'all' | 'Frontend' | 'Backend' | 'Tools & Platforms'>('all');
@@ -15,12 +15,18 @@ export const TechStackSection = () => {
 
     return (
         <section className="w-full relative overflow-visible py-16 px-3">
-            
-            <div className="absolute inset-0 pointer-events-none">
+
+            <motion.div
+                variants={cardVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.2 }}
+                className="absolute inset-0 pointer-events-none"
+            >
                 <div className="absolute inset-0 bg-linear-to-b from-neutral-800 rounded via-transparent to-neutral-900/10 border-t-2 border-neutral-600" />
                 <div className="absolute top-32 right-20 w-80 h-80 bg-neutral-200/3 rounded-full blur-3xl" />
                 <div className="absolute bottom-32 left-20 w-72 h-72 bg-slate-400/3 rounded-full blur-3xl" />
-            </div>
+            </motion.div>
 
             <motion.div
                 initial="hidden"
