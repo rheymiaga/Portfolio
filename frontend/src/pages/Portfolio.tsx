@@ -6,7 +6,7 @@ import { AboutSection } from "../components/sections/About/AboutSection"
 
 export const Portfolio = () => {
     return (
-        <div className="flex flex-col max-w-4xl mx-auto gap-16 py-20 px-3">
+        <div className="flex flex-col max-w-4xl mx-auto gap-16 py-20 px-3 overflow-hidden">
             <HeroSection />
             <ProjectsSection />
             <TechStackSection />

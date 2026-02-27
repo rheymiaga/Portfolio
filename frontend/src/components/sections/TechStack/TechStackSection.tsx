@@ -37,12 +37,12 @@ export const TechStackSection = () => {
             >
                 <motion.div
                     variants={sectionVariants}
-                    className="mb-12"
+                    className="mb-6"
                 >
                     <div className='flex items-center justify-between gap-4 mb-3'>
                         <motion.div variants={itemVariants}>
                             <h2 className="text-2xl md:text-[32px] font-semibold poppins text-white tracking-tight">
-                                Technologies & Tools
+                                Tech-Stack
                             </h2>
                         </motion.div>
                         <motion.div
@@ -74,7 +74,7 @@ export const TechStackSection = () => {
                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                         exit={{ opacity: 0 }}
                                         transition={{ duration: 0.1, type: 'spring', stiffness: 400, damping: 25 }}
-                                        className="absolute top-full right-0 mt-2 rounded-lg border border-neutral-700/30 bg-neutral-800/95 backdrop-blur-lg overflow-hidden shadow-lg z-50 text-left min-w-max"
+                                        className="absolute top-full right-0 mt-2 rounded-lg border border-neutral-700/30 bg-neutral-800/95 backdrop-blur-lg overflow-hidden shadow-lg z-50 text-left w-40"
                                     >
                                         {(['all', 'Frontend', 'Backend', 'Tools & Platforms'] as const).map((option) => (
                                             <motion.button
@@ -106,7 +106,7 @@ export const TechStackSection = () => {
                         variants={itemVariants}
                         className="text-[12px] md:text-base poppins text-neutral-400 leading-relaxed font-medium"
                     >
-                        Technologies and tools I use to build scalable, performant, and user-centric applications
+                        Tools and Frameworks Behind My Work
                     </motion.p>
                 </motion.div>
 
