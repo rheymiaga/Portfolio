@@ -33,5 +33,7 @@ export const portfolioReplies: Record<string, string> = {
     "location": "I live in Pasig City, Philippines.",
 
     "coffee": "I like drinking coffee about 3 times a day on average — it keeps me energized while coding and studying.",
-    "hobbies": "I enjoy exploring more technologies and tools that may help me improve as a developer and make my workflow more efficient."
+    "hobbies": "I enjoy exploring more technologies and tools that may help me improve as a developer and make my workflow more efficient.",
+    "hello": "Hi!👋 I'm Rei, your AI assistant. You can ask me anything about Rhey or his portfolio, and I'll be glad to help.",
+    "hi": "Hello!👋 I'm Rei, your AI assistant. You can ask me anything about Rhey or his portfolio, and I'll be glad to help.",
 };

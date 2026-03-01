@@ -38,7 +38,8 @@ const allowedTopics: AllowedTopicsConfig = {
         "hobbies",
         "fun fact",
         "dog",
-        "scotch"
+        "scotch",
+        "hello"
     ],
     defaultReply: "Please ask only about Rhey and his portfolio."
 };

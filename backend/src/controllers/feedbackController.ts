@@ -53,7 +53,7 @@ export const createFeedback = async (
         handleResponse(res, 201, "Feedback submitted successfully", newFeedback);
     } catch (err) {
         console.error("Error creating feedback:", err);
-        next(err);
+        return handleResponse(res, 500, "Internal Server Error");
     }
 };
 
@@ -72,7 +72,7 @@ export const getAllFeedbacks = async (
         handleResponse(res, 200, "Feedbacks fetched successfully", feedbacks);
     } catch (err) {
         console.error("Error fetching feedbacks:", err);
-        next(err);
+        return handleResponse(res, 500, "Internal Server Error");
     }
 };
 
@@ -92,6 +92,6 @@ export const deleteFeedback = async (
         handleResponse(res, 200, "Feedback deleted successfully", deletedFeedback);
     } catch (err) {
         console.error("Error deleting feedback:", err);
-        next(err);
+        return handleResponse(res, 500, "Internal Server Error");
     }
 };

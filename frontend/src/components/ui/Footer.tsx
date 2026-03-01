@@ -15,9 +15,9 @@ export const Footer = () => {
     const [name, setName] = useState("");
     const [text, setText] = useState("");
 
-    // Fetch feedbacks on mount
     useEffect(() => {
-        api.get(`${import.meta.env.VITE_API_URL}/api/feedbacks`)
+        api
+            .get(`${import.meta.env.VITE_API_URL}/api/feedbacks`)
             .then((res) => {
                 if (res.data.data) {
                     setFeedbacks(res.data.data);
@@ -43,21 +43,6 @@ export const Footer = () => {
             }
         } catch (err) {
             console.error("Error submitting feedback:", err);
-        }
-    };
-
-    // Delete feedback
-    const handleDelete = async (id: number) => {
-        try {
-            const res = await api.delete(
-                `${import.meta.env.VITE_API_URL}/api/feedbacks/${id}`
-            );
-
-            if (res.data.status === 200) {
-                setFeedbacks((prev) => prev.filter((fb) => fb.id !== id));
-            }
-        } catch (err) {
-            console.error("Error deleting feedback:", err);
         }
     };
 
@@ -114,21 +99,13 @@ export const Footer = () => {
                         {feedbacks.map((fb) => (
                             <div
                                 key={fb.id}
-                                className="bg-neutral-700 p-3 rounded text-sm text-neutral-200 flex justify-between items-start"
+                                className="bg-neutral-700 p-3 rounded text-sm text-neutral-200"
                             >
-                                <div>
-                                    <p className="font-semibold">{fb.name ?? "Anonymous"}</p>
-                                    <p>{fb.text}</p>
-                                    <p className="text-xs text-neutral-400">
-                                        {new Date(fb.created_at).toLocaleString()}
-                                    </p>
-                                </div>
-                                <button
-                                    onClick={() => handleDelete(fb.id)}
-                                    className="text-red-400 hover:text-red-600 text-xs ml-4"
-                                >
-                                    Delete
-                                </button>
+                                <p className="font-semibold">{fb.name ?? "Anonymous"}</p>
+                                <p>{fb.text}</p>
+                                <p className="text-xs text-neutral-400">
+                                    {new Date(fb.created_at).toLocaleString()}
+                                </p>
                             </div>
                         ))}
                     </div>
