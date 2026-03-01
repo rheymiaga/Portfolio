@@ -12,16 +12,20 @@ export const ReiBot = () => {
         setMessages(prev => [...prev, { sender: "user", text: input }]);
 
         try {
-            const res = await fetch("http://localhost:3001/chat", {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/chat`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: input })
+                body: JSON.stringify({ message: input }),
             });
 
+            if (!res.ok) {
+                throw new Error(`Server error: ${res.status}`);
+            }
 
             const data = await res.json();
             setMessages(prev => [...prev, { sender: "bot", text: data.reply }]);
         } catch (error) {
+            console.error("Error sending message:", error);
             setMessages(prev => [...prev, { sender: "bot", text: "⚠️ Error fetching reply." }]);
         }
 
