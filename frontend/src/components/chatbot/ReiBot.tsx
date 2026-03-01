@@ -3,10 +3,33 @@ import { RiRobot3Fill } from "react-icons/ri";
 
 export const ReiBot = () => {
     const [openChat, setOpenChat] = useState(false);
+    const [messages, setMessages] = useState<{ sender: "user" | "bot"; text: string }[]>([]);
+    const [input, setInput] = useState("");
+
+    const sendMessage = async () => {
+        if (!input.trim()) return;
+
+        setMessages(prev => [...prev, { sender: "user", text: input }]);
+
+        try {
+            const res = await fetch("http://localhost:3001/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: input })
+            });
+
+
+            const data = await res.json();
+            setMessages(prev => [...prev, { sender: "bot", text: data.reply }]);
+        } catch (error) {
+            setMessages(prev => [...prev, { sender: "bot", text: "⚠️ Error fetching reply." }]);
+        }
+
+        setInput("");
+    };
 
     return (
         <>
-
             <div className="fixed bottom-10 right-10 z-50">
                 <button
                     onClick={() => setOpenChat(!openChat)}
@@ -37,41 +60,43 @@ export const ReiBot = () => {
                     </header>
 
                     <div className="flex-1 p-4 space-y-4 overflow-y-auto text-white text-sm font-poppins">
-
-                        <div className="text-center bg-red-600 text-white py-2 rounded-md shadow-md">
-                            Feature still in development 
-                        </div>
-
-                        {/* Bot Message */}
-                        <div className="flex flex-col gap-2">
-                            <div className="flex items-center gap-2">
-                                <RiRobot3Fill className="flex shrink-0 text-2xl p-1 rounded-full bg-neutral-600 text-green-400" />
-                                <p className="font-semibold">Rei</p>
+                        {messages.map((msg, i) => (
+                            <div
+                                key={i}
+                                className={`flex ${msg.sender === "user" ? "justify-end" : "flex-col gap-2"}`}
+                            >
+                                {msg.sender === "bot" ? (
+                                    <>
+                                        <div className="flex items-center gap-2">
+                                            <RiRobot3Fill className="flex shrink-0 text-2xl p-1 rounded-full bg-neutral-600 text-green-400" />
+                                            <p className="font-semibold">Rei</p>
+                                        </div>
+                                        <div className="bg-neutral-700/80 rounded-lg p-3 max-w-[80%] text-left shadow-sm">
+                                            {msg.text}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="bg-neutral-600 rounded-lg p-3 max-w-[80%] shadow-sm">
+                                        {msg.text}
+                                    </div>
+                                )}
                             </div>
-                            <div className="bg-neutral-700/80 rounded-lg p-3 max-w-[80%] text-left shadow-sm">
-                                Hello there! How can I assist you today?
-                                <span className="block opacity-70 mt-1 text-xs">
-                                    (Ask about Rhey's Portfolio)
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* User Message */}
-                        <div className="flex justify-end">
-                            <div className="bg-neutral-600 rounded-lg p-3 max-w-[80%] shadow-sm">
-                                Sample Text Message Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus ratione dolor ipsum culpa architecto blanditiis alias fugiat nihil, corporis earum aliquid, corrupti eos voluptate distinctio! Consequuntur, nisi. Officia, esse culpa?
-                            </div>
-                        </div>
+                        ))}
                     </div>
-
 
                     <div className="flex items-center gap-2 p-3 border-t border-white/30 bg-neutral-900/80 rounded-b-lg">
                         <input
                             type="text"
+                            value={input}
+                            onChange={e => setInput(e.target.value)}
+                            onKeyDown={e => e.key === "Enter" && sendMessage()}
                             className="flex-1 px-3 py-2 rounded bg-black/60 text-white text-sm placeholder-white/50 focus:outline-none focus:ring-1 focus:ring-neutral-500 transition"
                             placeholder="Ask Rei a question..."
                         />
-                        <button className="px-4 py-2 rounded bg-neutral-600 text-white text-sm font-medium hover:bg-neutral-500 transition">
+                        <button
+                            onClick={sendMessage}
+                            className="px-4 py-2 rounded bg-neutral-600 text-white text-sm font-medium hover:bg-neutral-500 transition"
+                        >
                             Send
                         </button>
                     </div>

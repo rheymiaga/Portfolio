@@ -7,6 +7,7 @@ import { SiExpress, SiGithub, SiPostman, SiRender, SiVite } from "react-icons/si
 import { VscVscodeInsiders } from "react-icons/vsc";
 import { FaGitAlt } from "react-icons/fa";
 import { AiFillDatabase } from "react-icons/ai";
+import { FaHtml5 } from "react-icons/fa6";
 
 interface TechStackItem {
     name: string;
@@ -48,6 +49,12 @@ const frontendItems: TechStackItem[] = [
         name: "CSS3",
         icon: <IoLogoCss3 />,
         color: "#1572B6",
+        description: "Modern styling framework",
+    },
+    {
+        name: "HTML 5",
+        icon: <FaHtml5 />,
+        color: "#F16529",
         description: "Modern styling framework",
     },
 ];

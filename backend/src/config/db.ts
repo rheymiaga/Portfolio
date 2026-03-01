@@ -4,11 +4,16 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const pool = new Pool({
-    user: process.env.PGUSER,
-    password: process.env.PGPASSWORD,
-    host: process.env.PGHOST,
-    port: Number(process.env.PGPORT),
-    database: process.env.PGDATABASE,
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false
+});
+
+pool.on("connect", () => {
+    console.log("Connected to the database");
+});
+
+pool.on("error", (err: Error) => {
+    console.error("Database error", err);
 });
 
 export default pool;

@@ -171,7 +171,7 @@ export const tabContent: Record<string, React.ReactNode> = {
                 </span>,
                 <span className="text-blue-400">{`      </p>`}</span>,
 
-                <span className="text-blue-400">{`      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">`}</span>,
+                <span className="text-blue-400">{`      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">`}</span>,
                 <span className="text-blue-400">{`        {scotchImages.map((img, i) => (`}</span>,
 
                 <span className="text-blue-400">{`          <div key={i}>`}</span>,
