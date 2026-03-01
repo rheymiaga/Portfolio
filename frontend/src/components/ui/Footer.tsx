@@ -17,7 +17,7 @@ export const Footer = () => {
 
     // Fetch feedbacks on mount
     useEffect(() => {
-        api.get(`${import.meta.env.VITE_API_URL}/api/users`)
+        api.get(`${import.meta.env.VITE_API_URL}/api/feedbacks`)
             .then((res) => {
                 if (res.data.data) {
                     setFeedbacks(res.data.data);
@@ -31,7 +31,7 @@ export const Footer = () => {
         e.preventDefault();
         try {
             const res = await api.post(
-                `${import.meta.env.VITE_API_URL}/api/users`,
+                `${import.meta.env.VITE_API_URL}/api/feedbacks`,
                 { name, text },
                 { headers: { "Content-Type": "application/json" } }
             );
@@ -50,7 +50,7 @@ export const Footer = () => {
     const handleDelete = async (id: number) => {
         try {
             const res = await api.delete(
-                `${import.meta.env.VITE_API_URL}/api/users/${id}`
+                `${import.meta.env.VITE_API_URL}/api/feedbacks/${id}`
             );
 
             if (res.data.status === 200) {
