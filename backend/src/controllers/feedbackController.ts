@@ -5,7 +5,7 @@ import {
     createFeedbackService,
     deleteFeedbackService,
 } from "../models/feedbackServices.js";
-import type { Feedback } from "../models/feedbacks.js";
+import type { Feedback } from "../models/props.js";
 
 const handleResponse = <T>(
     res: Response,

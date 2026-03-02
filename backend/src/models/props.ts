@@ -5,3 +5,10 @@ export interface Feedback {
     ip_address: string;
     created_at: Date;
 }
+
+export interface Admin {
+    id: number;
+    email: string;
+    password?: string;
+    role: "admin";
+}

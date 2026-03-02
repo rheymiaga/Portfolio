@@ -5,6 +5,7 @@ import cors from "cors";
 import type { CorsOptions } from 'cors'
 import chatRouter from "./routes/chat.js";
 import feedbackRouter from "./routes/feedbacks.js";
+import adminRouter from "./routes/admin.js"
 
 dotenv.config();
 
@@ -33,7 +34,8 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/chat", chatRouter);
-app.use("/api", feedbackRouter);
+app.use("/api", feedbackRouter,);
+app.use("/api/auth", adminRouter);
 
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
     console.error(err.stack);

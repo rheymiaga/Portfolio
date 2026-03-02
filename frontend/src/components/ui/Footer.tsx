@@ -2,48 +2,108 @@ import { useState, useEffect } from "react";
 import { FooterLinks } from "./FooterLinks";
 import api from "../../api";
 
-interface Feedback {
-    id: number;
-    name?: string | null;
-    text: string;
-    ip_address: string;
-    created_at: string;
-}
-
 export const Footer = () => {
-    const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
     const [name, setName] = useState("");
     const [text, setText] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
+    const [remaining, setRemaining] = useState<number>(2);
+    const [cooldown, setCooldown] = useState<number>(0);
+
 
     useEffect(() => {
-        api
-            .get(`${import.meta.env.VITE_API_URL}/api/feedbacks`)
-            .then((res) => {
-                if (res.data.data) {
-                    setFeedbacks(res.data.data);
-                }
-            })
-            .catch((err) => console.error("Error fetching feedbacks:", err));
+        if (error || success) {
+            const timer = setTimeout(() => {
+                setError(null);
+                setSuccess(null);
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [error, success]);
+
+    useEffect(() => {
+        const storedDate = localStorage.getItem("feedbackDate");
+        const storedCount = localStorage.getItem("feedbackCount");
+        const today = new Date().toDateString();
+
+        if (storedDate === today && storedCount) {
+            const count = parseInt(storedCount, 10);
+            setRemaining(Math.max(0, 2 - count));
+
+            if (count >= 2) {
+                const now = new Date();
+                const tomorrow = new Date();
+                tomorrow.setHours(24, 0, 0, 0);
+                const diff = Math.floor((tomorrow.getTime() - now.getTime()) / 1000);
+                setCooldown(diff);
+            }
+        } else {
+            localStorage.setItem("feedbackDate", today);
+            localStorage.setItem("feedbackCount", "0");
+            setRemaining(2);
+            setCooldown(0);
+        }
     }, []);
 
-    // Submit feedback
+    useEffect(() => {
+        if (cooldown > 0) {
+            const interval = setInterval(() => {
+                setCooldown((prev) => (prev > 0 ? prev - 1 : 0));
+            }, 1000);
+            return () => clearInterval(interval);
+        }
+    }, [cooldown]);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLoading(true);
+        setError(null);
+        setSuccess(null);
+
         try {
-            const res = await api.post(
-                `${import.meta.env.VITE_API_URL}/api/feedbacks`,
+            if (remaining <= 0) {
+                setError("Daily limit reached.");
+                return;
+            }
+
+            await api.post(
+                "/api/feedbacks",
                 { name, text },
                 { headers: { "Content-Type": "application/json" } }
             );
 
-            if (res.data.data) {
-                setFeedbacks((prev) => [res.data.data, ...prev]);
-                setName("");
-                setText("");
+            const today = new Date().toDateString();
+            const count = parseInt(localStorage.getItem("feedbackCount") || "0", 10) + 1;
+            localStorage.setItem("feedbackDate", today);
+            localStorage.setItem("feedbackCount", count.toString());
+
+            setRemaining(Math.max(0, 2 - count));
+
+            if (count >= 2) {
+                const now = new Date();
+                const tomorrow = new Date();
+                tomorrow.setHours(24, 0, 0, 0);
+                const diff = Math.floor((tomorrow.getTime() - now.getTime()) / 1000);
+                setCooldown(diff);
             }
+
+            setName("");
+            setText("");
+            setSuccess("Thanks for your feedback!");
         } catch (err) {
             console.error("Error submitting feedback:", err);
+            setError("Failed to submit feedback");
+        } finally {
+            setLoading(false);
         }
+    };
+
+    const formatTime = (seconds: number) => {
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = seconds % 60;
+        return `${h}h ${m}m ${s}s`;
     };
 
     return (
@@ -70,7 +130,6 @@ export const Footer = () => {
                         I welcome your feedback to enhance my work and future projects.
                     </p>
 
-                    {/* Feedback Form */}
                     <form className="space-y-3" onSubmit={handleSubmit}>
                         <input
                             type="text"
@@ -88,27 +147,33 @@ export const Footer = () => {
                         ></textarea>
                         <button
                             type="submit"
-                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded text-sm font-medium transition"
+                            disabled={loading || remaining <= 0}
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded text-sm font-medium transition disabled:opacity-50"
                         >
-                            Submit Feedback
+                            {loading ? "Submitting..." : "Submit Feedback"}
                         </button>
-                    </form>
 
-                    {/* Feedback List */}
-                    <div className="space-y-2 mt-4">
-                        {feedbacks.map((fb) => (
-                            <div
-                                key={fb.id}
-                                className="bg-neutral-700 p-3 rounded text-sm text-neutral-200"
-                            >
-                                <p className="font-semibold">{fb.name ?? "Anonymous"}</p>
-                                <p>{fb.text}</p>
-                                <p className="text-xs text-neutral-400">
-                                    {new Date(fb.created_at).toLocaleString()}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
+                        {error && (
+                            <p className="text-red-500 text-sm mt-2 transition-opacity duration-500">
+                                {error}
+                            </p>
+                        )}
+                        {success && (
+                            <p className="text-green-400 text-sm mt-2 transition-opacity duration-500">
+                                {success}
+                            </p>
+                        )}
+
+                        {remaining > 0 ? (
+                            <p className="text-green-400 text-sm mt-2">
+                                {remaining} feedback{remaining > 1 ? "s" : ""} left today.
+                            </p>
+                        ) : (
+                            <p className="text-yellow-400 text-sm mt-2">
+                                Limit reached. Try again in {formatTime(cooldown)}.
+                            </p>
+                        )}
+                    </form>
                 </div>
             </div>
 
