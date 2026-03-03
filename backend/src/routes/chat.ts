@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
     try {
         const response = await axios({
             method: 'post',
-            url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent`,
+            url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent`,
             params: {
                 key: process.env.GEMINI_API_KEY
             },
