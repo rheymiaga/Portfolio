@@ -46,7 +46,7 @@ export const createFeedback = async (
 
         const deviceFeedbacks = await getFeedbacksByDeviceService(deviceId);
         if (deviceFeedbacks.length >= 2) {
-            return handleResponse(res, 429, "Daily limit reached for this device.");
+            return handleResponse(res, 429, "Submission limit reached. Please try again in 12 hours.");
         }
 
         const ipFeedbacks = await getFeedbacksByIPService(ip);
@@ -61,7 +61,6 @@ export const createFeedback = async (
         return handleResponse(res, 500, "Internal Server Error");
     }
 };
-
 
 export const getAllFeedbacks = async (
     _req: Request,
