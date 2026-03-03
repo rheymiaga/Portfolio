@@ -42,6 +42,7 @@ export const Footer = () => {
                 setRemaining(0);
                 setCooldown(Math.floor((expiry - now) / 1000));
             } else {
+                // Timer finished: Clear everything
                 localStorage.removeItem("feedbackExpiry");
                 localStorage.setItem("feedbackCount", "0");
                 setRemaining(2);
@@ -56,7 +57,16 @@ export const Footer = () => {
     useEffect(() => {
         if (cooldown > 0) {
             const interval = setInterval(() => {
-                setCooldown((prev) => (prev > 0 ? prev - 1 : 0));
+                setCooldown((prev) => {
+                    if (prev <= 1) {
+                        // Reset state when timer hits zero
+                        localStorage.removeItem("feedbackExpiry");
+                        localStorage.setItem("feedbackCount", "0");
+                        setRemaining(2);
+                        return 0;
+                    }
+                    return prev - 1;
+                });
             }, 1000);
             return () => clearInterval(interval);
         }
@@ -79,13 +89,19 @@ export const Footer = () => {
                 return;
             }
 
+            // SIMPLIFIED: Let the backend handle the "Anonymous" string
             await api.post(
                 "/api/feedbacks",
-                { name: name.trim() || "Anonymous", text, deviceId },
+                {
+                    name: name.trim() || null,
+                    text: text.trim(),
+                    deviceId
+                },
                 { headers: { "Content-Type": "application/json" } }
             );
 
-            const newCount = parseInt(localStorage.getItem("feedbackCount") || "0", 10) + 1;
+            const currentCount = parseInt(localStorage.getItem("feedbackCount") || "0", 10);
+            const newCount = currentCount + 1;
             localStorage.setItem("feedbackCount", newCount.toString());
 
             setRemaining(Math.max(0, 2 - newCount));
