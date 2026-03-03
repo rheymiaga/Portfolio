@@ -11,7 +11,7 @@ export const getFeedbacksByDeviceService = async (deviceId: string) => {
     const result = await pool.query(
         `SELECT id FROM feedbacks 
          WHERE device_id = $1 
-         AND created_at > NOW() - INTERVAL '24 hours'`,
+         AND created_at > NOW() - INTERVAL '12 hours'`,
         [deviceId]
     );
     return result.rows;
@@ -21,7 +21,7 @@ export const getFeedbacksByIPService = async (ip: string) => {
     const result = await pool.query(
         `SELECT id FROM feedbacks 
          WHERE ip_address = $1 
-         AND created_at > NOW() - INTERVAL '24 hours'`,
+         AND created_at > NOW() - INTERVAL '12 hours'`,
         [ip]
     );
     return result.rows;
