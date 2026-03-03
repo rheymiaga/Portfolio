@@ -20,23 +20,37 @@ export const ReiBot = () => {
         const userMessage = input;
         setInput("");
         setMessages(prev => [...prev, { sender: "user", text: userMessage }]);
-
         setIsTyping(true);
 
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/chat`, {
+            const baseUrl = import.meta.env.VITE_API_URL.endsWith('/')
+                ? import.meta.env.VITE_API_URL.slice(0, -1)
+                : import.meta.env.VITE_API_URL;
+
+            const res = await fetch(`${baseUrl}/chat`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
                 body: JSON.stringify({ message: userMessage }),
             });
 
-            if (!res.ok) throw new Error(`Server error: ${res.status}`);
+            if (!res.ok) {
+                const errorData = await res.json().catch(() => ({}));
+                throw new Error(errorData.reply || `Server error: ${res.status}`);
+            }
 
             const data = await res.json();
             setMessages(prev => [...prev, { sender: "bot", text: data.reply }]);
-        } catch (error) {
-            console.error("Error sending message:", error);
-            setMessages(prev => [...prev, { sender: "bot", text: "⚠️ Error fetching reply." }]);
+        } catch (error: any) {
+            console.error("Connection Error:", error);
+
+            const errorMessage = error.message.includes("Failed to fetch")
+                ? "⚠️ Cannot reach Rei. Is the backend running?"
+                : "⚠️ Rei is experiencing a brain freeze.";
+
+            setMessages(prev => [...prev, { sender: "bot", text: errorMessage }]);
         } finally {
             setIsTyping(false);
         }
