@@ -23,7 +23,7 @@ import gameHubDesktop from "../../../assets/images/GameHubDesktop.png";
 import electrical_shop_mobile from "../../../assets/images/electrical-shop-mobile.png";
 import electrical_shop_desktop from "../../../assets/images/electrical-shop-desktop.png";
 
-import YanYanMobileVid from "../../../assets/videos/YanYanMobileVId.mp4";
+import YanYanMobileVid from "../../../assets/videos/YanYanMobileVid.mp4";
 import YanYanDesktopVid from "../../../assets/videos/YanYanDesktopVid.mp4";
 import AuctionXpressMobileVid from "../../../assets/videos/AuctionXpressMobileVid.mp4";
 import AuctionXpressDesktopVid from "../../../assets/videos/AuctionXpressDesktopVid.mp4";
