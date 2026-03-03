@@ -42,7 +42,9 @@ const App = () => {
     </div>
   );
 
+
   return (
+
     <Routes>
       {/* Portfolio is usually public, but we pass user status just in case */}
       <Route path="/" element={<Portfolio user={user} />} />

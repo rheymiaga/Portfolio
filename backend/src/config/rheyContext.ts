@@ -13,6 +13,7 @@ export const rheyContext = {
     story: {
         origin: "Started as a solo game developer on Roblox in 2019 during the pandemic.",
         milestone: "Achieved full-stack developer status ahead of schedule before 3rd year.",
+        motivation: "He started programming during the 2019 pandemic because he was curious about how games work. What began as a hobby of creating his own worlds on Roblox evolved into a deep fascination with building functional, real-world applications.",
         passion: "Minimalist UI/UX design and clean, efficient code."
     },
     tech_stack: {
@@ -29,7 +30,8 @@ export const rheyContext = {
     },
     personal_facts: {
         pet: "Shih Tzu named Scotch 🐶 (visible in portfolio background)",
-        coffee: "Drinks coffee ~3 times a day",
-        hobbies: "Exploring new dev tools and optimizing workflows"
+        coffee: "Fueling the logic with coffee ~3 times a day",
+        hobbies: "Exploring new dev tools and optimizing workflows",
+        partner: "Inspired daily by Celine Philomena Velasco, whom I call Philo. Her name itself is a word for love, which is fitting because she's a brilliant academic achiever and a gifted artist whose loving heart and creative soul make everything I build more meaningful."
     }
 };

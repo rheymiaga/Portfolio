@@ -16,8 +16,11 @@ interface PortfolioProps {
     error?: string;
 }
 
+
 export const Portfolio = ({ user, error }: PortfolioProps) => {
+
     return (
+
         <>
             <ReiBot />
             <div className="flex flex-col max-w-4xl mx-auto gap-16 py-20 px-3 overflow-hidden">
