@@ -2,17 +2,26 @@ import pool from "../config/db.js";
 
 export const getAllFeedbackService = async () => {
     const result = await pool.query(
-        "SELECT id, name, text, ip_address, created_at FROM feedbacks ORDER BY created_at DESC"
+        "SELECT id, name, text, ip_address, device_id, created_at FROM feedbacks ORDER BY created_at DESC"
+    );
+    return result.rows;
+};
+
+export const getFeedbacksByDeviceService = async (deviceId: string) => {
+    const result = await pool.query(
+        `SELECT id FROM feedbacks 
+         WHERE device_id = $1 
+         AND created_at > NOW() - INTERVAL '24 hours'`,
+        [deviceId]
     );
     return result.rows;
 };
 
 export const getFeedbacksByIPService = async (ip: string) => {
     const result = await pool.query(
-        `SELECT id, name, text, created_at 
-     FROM feedbacks 
-     WHERE ip_address = $1 
-     AND created_at > NOW() - INTERVAL '24 hours'`,
+        `SELECT id FROM feedbacks 
+         WHERE ip_address = $1 
+         AND created_at > NOW() - INTERVAL '24 hours'`,
         [ip]
     );
     return result.rows;
@@ -21,13 +30,14 @@ export const getFeedbacksByIPService = async (ip: string) => {
 export const createFeedbackService = async (
     name: string | null,
     text: string,
-    ip: string
+    ip: string,
+    deviceId: string
 ) => {
     const result = await pool.query(
-        `INSERT INTO feedbacks (name, text, ip_address) 
-     VALUES ($1, $2, $3) 
-     RETURNING id, name, text, ip_address, created_at`,
-        [name, text, ip]
+        `INSERT INTO feedbacks (name, text, ip_address, device_id) 
+         VALUES ($1, $2, $3, $4) 
+         RETURNING id, name, text, ip_address, device_id, created_at`,
+        [name, text, ip, deviceId]
     );
     return result.rows[0];
 };

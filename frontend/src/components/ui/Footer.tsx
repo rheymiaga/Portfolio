@@ -11,13 +11,21 @@ export const Footer = () => {
     const [remaining, setRemaining] = useState<number>(2);
     const [cooldown, setCooldown] = useState<number>(0);
 
+    const getDeviceId = () => {
+        let id = localStorage.getItem("portfolio_device_id");
+        if (!id) {
+            id = crypto.randomUUID();
+            localStorage.setItem("portfolio_device_id", id);
+        }
+        return id;
+    };
 
     useEffect(() => {
         if (error || success) {
             const timer = setTimeout(() => {
                 setError(null);
                 setSuccess(null);
-            }, 3000);
+            }, 5000);
             return () => clearTimeout(timer);
         }
     }, [error, success]);
@@ -61,15 +69,17 @@ export const Footer = () => {
         setError(null);
         setSuccess(null);
 
+        const deviceId = getDeviceId();
+
         try {
             if (remaining <= 0) {
-                setError("Daily limit reached.");
+                setError("Daily limit reached for this device.");
                 return;
             }
 
             await api.post(
                 "/api/feedbacks",
-                { name, text },
+                { name, text, deviceId },
                 { headers: { "Content-Type": "application/json" } }
             );
 
@@ -79,21 +89,12 @@ export const Footer = () => {
             localStorage.setItem("feedbackCount", count.toString());
 
             setRemaining(Math.max(0, 2 - count));
-
-            if (count >= 2) {
-                const now = new Date();
-                const tomorrow = new Date();
-                tomorrow.setHours(24, 0, 0, 0);
-                const diff = Math.floor((tomorrow.getTime() - now.getTime()) / 1000);
-                setCooldown(diff);
-            }
-
             setName("");
             setText("");
-            setSuccess("Thanks for your feedback!");
-        } catch (err) {
-            console.error("Error submitting feedback:", err);
-            setError("Failed to submit feedback");
+            setSuccess("Thank you! Your feedback has been received.");
+        } catch (err: any) {
+            const msg = err.response?.data?.message || "Failed to submit feedback";
+            setError(msg);
         } finally {
             setLoading(false);
         }
@@ -107,78 +108,87 @@ export const Footer = () => {
     };
 
     return (
-        <footer className="bg-neutral-800 text-white border-t-2 border-t-neutral-700">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-10 poppins px-3 max-w-6xl mx-auto">
-                {/* Work With Me Section */}
-                <div className="space-y-4">
-                    <h3 className="text-lg font-semibold">Work With Me</h3>
-                    <p className="text-neutral-400 text-sm leading-relaxed">
-                        I’m open to projects, commissions, and collaborations, with a focus
-                        on contributing meaningful work and delivering creative, professional
-                        solutions.
-                    </p>
-                    <p className="text-neutral-400 text-sm">
-                        Get in touch via email or explore my work on GitHub:
-                    </p>
-                    <FooterLinks />
+        <footer className="bg-[#171717] text-white border-t border-neutral-800">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 py-16 px-6 max-w-6xl mx-auto">
+
+                <div className="flex flex-col justify-between poppins">
+                    <div className="space-y-6">
+                        <h3 className="text-xl font-medium tracking-tight">Work With Me</h3>
+                        <p className="text-neutral-400 text-[15px] leading-relaxed max-w-md">
+                            I’m open to projects, commissions, and collaborations, with a focus
+                            on contributing meaningful work and delivering creative, professional
+                            solutions.
+                        </p>
+                        <FooterLinks />
+                    </div>
+                    <div className="mt-8 pt-8 border-t border-neutral-800 hidden md:block">
+                        <p className="text-neutral-500 text-xs poppins tracking-widest uppercase">
+                            Available for freelance projects
+                        </p>
+                    </div>
                 </div>
 
-                {/* Feedback Section */}
-                <div className="space-y-4">
-                    <h3 className="text-lg font-semibold">Feedback</h3>
-                    <p className="text-neutral-400 text-sm">
-                        I welcome your feedback to enhance my work and future projects.
+                <div className="bg-[#1f1f1f] p-8 rounded-2xl border border-neutral-800 shadow-xl">
+                    <h3 className="text-lg font-medium mb-2">Leave Feedback</h3>
+                    <p className="text-neutral-400 text-sm mb-6">
+                        Your insights help me grow as a developer.
                     </p>
 
-                    <form className="space-y-3" onSubmit={handleSubmit}>
-                        <input
-                            type="text"
-                            placeholder="Your name (optional)"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className="w-full px-3 py-2 rounded bg-neutral-800 text-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        />
-                        <textarea
-                            placeholder="Your feedback..."
-                            rows={2}
-                            value={text}
-                            onChange={(e) => setText(e.target.value)}
-                            className="w-full px-3 py-2 rounded bg-neutral-800 text-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        ></textarea>
+                    <form className="space-y-4" onSubmit={handleSubmit}>
+                        <div>
+                            <input
+                                type="text"
+                                placeholder="Name (Optional)"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-neutral-200 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+                            />
+                        </div>
+                        <div>
+                            <textarea
+                                placeholder="What's on your mind?"
+                                rows={3}
+                                value={text}
+                                onChange={(e) => setText(e.target.value)}
+                                className="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-neutral-200 text-sm focus:outline-none focus:border-indigo-500 transition-colors resize-none"
+                            ></textarea>
+                        </div>
+
                         <button
                             type="submit"
                             disabled={loading || remaining <= 0}
-                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded text-sm font-medium transition disabled:opacity-50"
+                            className="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-xl text-sm font-semibold transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-indigo-900/20"
                         >
-                            {loading ? "Submitting..." : "Submit Feedback"}
+                            {loading ? "Sending..." : "Send Message"}
                         </button>
 
-                        {error && (
-                            <p className="text-red-500 text-sm mt-2 transition-opacity duration-500">
-                                {error}
-                            </p>
-                        )}
-                        {success && (
-                            <p className="text-green-400 text-sm mt-2 transition-opacity duration-500">
-                                {success}
-                            </p>
-                        )}
-
-                        {remaining > 0 ? (
-                            <p className="text-green-400 text-sm mt-2">
-                                {remaining} feedback{remaining > 1 ? "s" : ""} left today.
-                            </p>
-                        ) : (
-                            <p className="text-yellow-400 text-sm mt-2">
-                                Limit reached. Try again in {formatTime(cooldown)}.
-                            </p>
-                        )}
+                        <div className="min-h-5">
+                            {error && (
+                                <p className="text-red-400 text-xs animate-pulse">{error}</p>
+                            )}
+                            {success && (
+                                <p className="text-emerald-400 text-xs font-medium">{success}</p>
+                            )}
+                            {!error && !success && (
+                                remaining > 0 ? (
+                                    <p className="text-neutral-500 text-xs">
+                                        {remaining} attempt{remaining > 1 ? "s" : ""} available today
+                                    </p>
+                                ) : (
+                                    <p className="text-amber-500 text-xs">
+                                        Resets in {formatTime(cooldown)}
+                                    </p>
+                                )
+                            )}
+                        </div>
                     </form>
                 </div>
             </div>
 
-            <div className="border-t poppins border-neutral-800/50 py-4 text-center text-sm text-neutral-500">
-                © Rhey Louie Miaga, {new Date().getFullYear()}
+            <div className="border-t poppins border-neutral-800/50 py-8 text-center">
+                <p className="text-neutral-500 text-xs font-light tracking-wide">
+                    &copy; {new Date().getFullYear()} RHEY LOUIE MIAGA
+                </p>
             </div>
         </footer>
     );

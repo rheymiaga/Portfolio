@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import {
     getAllFeedbackService,
     getFeedbacksByIPService,
+    getFeedbacksByDeviceService,
     createFeedbackService,
     deleteFeedbackService,
 } from "../models/feedbackServices.js";
@@ -23,6 +24,7 @@ const handleResponse = <T>(
 interface FeedbackPayload {
     name?: string;
     text: string;
+    deviceId: string;
 }
 
 export const createFeedback = async (
@@ -31,24 +33,27 @@ export const createFeedback = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const { name, text } = req.body;
-
-        if (!req.ip) {
-            return handleResponse(res, 400, "Unable to determine client IP");
-        }
-        const ip: string = req.ip;
+        const { name, text, deviceId } = req.body;
+        const ip: string = req.ip || "unknown";
 
         if (!text || text.trim().length === 0) {
             return handleResponse(res, 400, "Feedback text is required");
         }
 
-        const feedbacks = await getFeedbacksByIPService(ip);
-
-        if (feedbacks.length >= 2) {
-            return handleResponse(res, 429, "Daily limit reached (2 messages per 24h)");
+        if (!deviceId) {
+            return handleResponse(res, 400, "Device identifier is missing");
         }
 
-        const newFeedback: Feedback = await createFeedbackService(name ?? null, text, ip);
+        const deviceFeedbacks = await getFeedbacksByDeviceService(deviceId);
+        if (deviceFeedbacks.length >= 2) {
+            return handleResponse(res, 429, "Daily limit reached for this device.");
+        }
+
+        const ipFeedbacks = await getFeedbacksByIPService(ip);
+        if (ipFeedbacks.length >= 20) {
+            return handleResponse(res, 429, "Too many requests from this network.");
+        }
+        const newFeedback: Feedback = await createFeedbackService(name ?? null, text, ip, deviceId);
 
         handleResponse(res, 201, "Feedback submitted successfully", newFeedback);
     } catch (err) {
@@ -56,6 +61,7 @@ export const createFeedback = async (
         return handleResponse(res, 500, "Internal Server Error");
     }
 };
+
 
 export const getAllFeedbacks = async (
     _req: Request,
