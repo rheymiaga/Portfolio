@@ -5,18 +5,13 @@
         "target": "ESNext",
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
-        "types": [
-            "node"
-        ],
-        "sourceMap": true,
-        "strict": true,
         "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
         "skipLibCheck": true,
+        "strict": true,
+        "sourceMap": true,
         "forceConsistentCasingInFileNames": true,
-        "isolatedModules": true,
-        "verbatimModuleSyntax": true,
-        "declaration": true,
-        "declarationMap": true
+        "declaration": true
     },
     "include": [
         "src/**/*.ts"
