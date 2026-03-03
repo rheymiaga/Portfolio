@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import api from "../api";
 import { IoLockClosedOutline, IoMailOutline, IoShieldCheckmarkOutline, IoArrowBackOutline } from "react-icons/io5";
 import type { User } from "../App";
@@ -19,18 +19,19 @@ export const Login = ({ setUser }: LoginProps) => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 15;
-            const y = (e.clientY / window.innerHeight - 0.5) * 15;
-            const bg = document.getElementById('scotch-bg');
-            if (bg) {
-                bg.style.transform = `translate(${x}px, ${y}px) scale(1.1)`;
-            }
-        };
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+    const mouseX = useSpring(x, { stiffness: 60, damping: 20 });
+    const mouseY = useSpring(y, { stiffness: 60, damping: 20 });
+
+    const rotateX = useTransform(mouseY, [-300, 300], [3, -3]);
+    const rotateY = useTransform(mouseX, [-300, 300], [-3, 3]);
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        x.set(e.clientX - (rect.left + rect.width / 2));
+        y.set(e.clientY - (rect.top + rect.height / 2));
+    };
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -45,7 +46,7 @@ export const Login = ({ setUser }: LoginProps) => {
                 setUser(adminData);
                 navigate("/admin", { replace: true });
             } else {
-                setError("Access key rejected. System mismatch.");
+                setError("Credentials rejected.");
             }
         } catch (err: any) {
             setError(err.response?.data?.message || "Verification failed.");
@@ -55,131 +56,112 @@ export const Login = ({ setUser }: LoginProps) => {
     };
 
     return (
-        <div className="relative flex items-center justify-center min-h-screen text-gray-100 p-6 overflow-hidden poppins">
-
+        <div
+            className="relative flex items-center justify-center min-h-screen bg-[#050505] text-neutral-200 p-6 overflow-hidden selection:bg-white/10"
+            onMouseMove={handleMouseMove}
+        >
             <motion.div
-                id="scotch-bg"
-                className="absolute inset-0 bg-cover bg-center opacity-5 pointer-events-none grayscale will-change-transform"
-                style={{ backgroundImage: `url(${Scotch})` }}
+                className="absolute inset-0 opacity-25 grayscale pointer-events-none z-0"
+                style={{
+                    backgroundImage: `url(${Scotch})`,
+                    backgroundSize: '280px',
+                    x: useTransform(mouseX, (v) => v * -0.03),
+                    y: useTransform(mouseY, (v) => v * -0.03),
+                    filter: "contrast(1.2) brightness(0.8)"
+                }}
             />
 
-            <div className="absolute top-[-10%] left-[-10%] w-lg h-128 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-lg h-128 bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute top-0 left-1/4 w-150 h-150 bg-blue-500/10 blur-[140px] rounded-full pointer-events-none z-0" />
+            <div className="absolute bottom-0 right-1/4 w-150 h-150 bg-indigo-500/10 blur-[140px] rounded-full pointer-events-none z-0" />
 
             <motion.div
                 className="w-full max-w-md z-10"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
             >
-                <div className="bg-[#0D0D0D]/40 border border-white/10 shadow-2xl rounded-[2.5rem] p-10 backdrop-blur-3xl relative">
+                <div className="bg-neutral-900/70 border border-white/10 backdrop-blur-3xl rounded-[2.5rem] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative">
+                    <div className="relative z-20">
 
-                    <div className="flex flex-col items-center mb-10">
-                        <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            whileHover={{ rotate: 15 }}
-                            className="p-4 bg-linear-to-br from-white/10 to-transparent rounded-2xl mb-5 border border-white/10 shadow-xl"
-                        >
-                            <IoShieldCheckmarkOutline className="text-white text-3xl" />
-                        </motion.div>
-                        <h2 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-b from-white to-neutral-500">
-                            Portal Login
-                        </h2>
-                    </div>
-
-                    <form onSubmit={handleLogin} className="space-y-8">
-                        <AnimatePresence mode="wait">
-                            {error && (
-                                <motion.div
-                                    initial={{ opacity: 0, height: 0 }}
-                                    animate={{ opacity: 1, height: 'auto' }}
-                                    exit={{ opacity: 0, height: 0 }}
-                                    className="bg-red-500/10 border border-red-500/20 rounded-xl p-3"
-                                >
-                                    <p className="text-red-400 text-xs font-medium text-center">{error}</p>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-
-                        {/* Email Field */}
-                        <div className="relative group">
-                            <motion.label
-                                initial={false}
-                                animate={{
-                                    y: (focusedField === 'email' || email) ? -32 : 0,
-                                    x: (focusedField === 'email' || email) ? -38 : 0,
-                                    scale: (focusedField === 'email' || email) ? 0.85 : 1,
-                                    color: (focusedField === 'email' || email) ? '#f9fafb' : '#4b5563'
-                                }}
-                                className="absolute left-12 top-4 pointer-events-none text-sm font-medium z-10"
+                        <div className="flex flex-col items-center mb-12">
+                            <motion.div
+                                whileHover={{ rotate: 360 }}
+                                transition={{ duration: 0.8 }}
+                                className="p-4 bg-white/5 border border-white/10 rounded-2xl mb-4"
                             >
-                                Email Address
-                            </motion.label>
-                            <div className={`relative flex items-center bg-white/5 border rounded-2xl transition-all duration-300 ${focusedField === 'email' ? 'border-white/30 bg-white/10' : 'border-white/5'}`}>
-                                <IoMailOutline className={`absolute left-4 text-xl transition-colors duration-300 ${focusedField === 'email' ? 'text-white' : 'text-neutral-600'}`} />
-                                <input
-                                    type="email"
-                                    onFocus={() => setFocusedField('email')}
-                                    onBlur={() => setFocusedField(null)}
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                    className="w-full bg-transparent text-white pl-12 pr-4 py-4 focus:outline-none text-sm"
-                                />
-                            </div>
+                                <IoShieldCheckmarkOutline className="text-white text-3xl" />
+                            </motion.div>
+                            <h2 className="text-3xl font-bold tracking-tight text-white uppercase">Admin</h2>
                         </div>
 
-                        {/* Password Field */}
-                        <div className="relative group">
-                            <motion.label
-                                initial={false}
-                                animate={{
-                                    y: (focusedField === 'password' || password) ? -32 : 0,
-                                    x: (focusedField === 'password' || password) ? -38 : 0,
-                                    scale: (focusedField === 'password' || password) ? 0.85 : 1,
-                                    color: (focusedField === 'password' || password) ? '#f9fafb' : '#4b5563'
-                                }}
-                                className="absolute left-12 top-4 pointer-events-none text-sm font-medium z-10"
+                        <form onSubmit={handleLogin} className="space-y-8">
+                            <AnimatePresence mode="wait">
+                                {error && (
+                                    <motion.div
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: 'auto' }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-center"
+                                    >
+                                        <p className="text-red-400 text-[10px] font-bold uppercase tracking-widest">{error}</p>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                            {[
+                                { id: 'email', label: 'Admin Identifier', type: 'email', val: email, set: setEmail, icon: IoMailOutline },
+                                { id: 'password', label: 'Security Key', type: 'password', val: password, set: setPassword, icon: IoLockClosedOutline }
+                            ].map((field) => (
+                                <div key={field.id} className="relative group">
+                                    <motion.label
+                                        initial={false}
+                                        animate={{
+                                            y: (focusedField === field.id || field.val) ? -28 : 0,
+                                            scale: (focusedField === field.id || field.val) ? 0.8 : 1,
+                                            color: (focusedField === field.id || field.val) ? "#ffffff" : "#525252",
+                                        }}
+                                        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                                        className="absolute left-12 top-4 pointer-events-none text-sm font-medium origin-left z-30"
+                                    >
+                                        {field.label}
+                                    </motion.label>
+
+                                    <div className={`relative flex items-center bg-white/3 border rounded-2xl transition-all duration-500 ${focusedField === field.id ? 'border-white/30 bg-white/[0.07] ring-1 ring-white/10' : 'border-white/5'}`}>
+                                        <field.icon className={`ml-4 text-xl transition-colors duration-300 ${focusedField === field.id ? 'text-white' : 'text-neutral-600'}`} />
+                                        <input
+                                            type={field.type}
+                                            value={field.val}
+                                            onChange={(e) => field.set(e.target.value)}
+                                            onFocus={() => setFocusedField(field.id)}
+                                            onBlur={() => setFocusedField(null)}
+                                            required
+                                            className="w-full bg-transparent text-white px-4 py-4 focus:outline-none text-sm relative z-20"
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+
+                            <motion.button
+                                whileHover={{ scale: 1.02, backgroundColor: "#ffffff" }}
+                                whileTap={{ scale: 0.98 }}
+                                disabled={loading}
+                                className="w-full py-4 bg-neutral-100 text-black font-black uppercase tracking-[0.2em] text-xs rounded-2xl transition-all disabled:opacity-50 flex items-center justify-center shadow-xl"
                             >
-                                Security Keyphrase
-                            </motion.label>
-                            <div className={`relative flex items-center bg-white/5 border rounded-2xl transition-all duration-300 ${focusedField === 'password' ? 'border-white/30 bg-white/10' : 'border-white/5'}`}>
-                                <IoLockClosedOutline className={`absolute left-4 text-xl transition-colors duration-300 ${focusedField === 'password' ? 'text-white' : 'text-neutral-600'}`} />
-                                <input
-                                    type="password"
-                                    onFocus={() => setFocusedField('password')}
-                                    onBlur={() => setFocusedField(null)}
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                    className="w-full bg-transparent text-white pl-12 pr-4 py-4 focus:outline-none text-sm"
-                                />
-                            </div>
+                                {loading ? (
+                                    <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                                ) : "Initiate Login"}
+                            </motion.button>
+                        </form>
+
+                        <div className="mt-10 pt-6 border-t border-white/5 text-center">
+                            <Link
+                                to="/"
+                                className="group inline-flex items-center gap-2 text-[10px] text-neutral-500 hover:text-white transition-all uppercase tracking-[0.3em]"
+                            >
+                                <IoArrowBackOutline className="group-hover:-translate-x-1 transition-transform" />
+                                Return to Portfolio
+                            </Link>
                         </div>
-
-                        <motion.button
-                            whileHover={{ scale: 1.02, backgroundColor: "#f3f4f6" }}
-                            whileTap={{ scale: 0.98 }}
-                            disabled={loading}
-                            className="w-full py-4 bg-white text-black font-bold rounded-2xl transition-all disabled:opacity-50 flex items-center justify-center gap-3 shadow-xl"
-                        >
-                            {loading ? (
-                                <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
-                            ) : (
-                                "Verify Identity"
-                            )}
-                        </motion.button>
-                    </form>
-
-                    <div className="mt-10 pt-6 border-t border-white/5 flex flex-col items-center gap-4">
-                        <Link
-                            to="/"
-                            className="group flex items-center gap-2 text-[11px] text-neutral-500 hover:text-white transition-all uppercase tracking-[0.2em]"
-                        >
-                            <IoArrowBackOutline className="group-hover:-translate-x-1 transition-transform" />
-                            Return to Portfolio
-                        </Link>
                     </div>
                 </div>
             </motion.div>

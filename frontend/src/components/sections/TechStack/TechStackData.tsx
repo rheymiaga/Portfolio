@@ -49,13 +49,13 @@ const frontendItems: TechStackItem[] = [
         name: "CSS3",
         icon: <IoLogoCss3 />,
         color: "#1572B6",
-        description: "Modern styling framework",
+        description: "Modern styling language",
     },
     {
         name: "HTML 5",
         icon: <FaHtml5 />,
         color: "#F16529",
-        description: "Modern styling framework",
+        description: "Web markup standard",
     },
 ];
 
@@ -91,7 +91,7 @@ const toolsItems: TechStackItem[] = [
         name: "Github",
         icon: <SiGithub />,
         color: "#333333",
-        description: "Version control platform",
+        description: "Code hosting platform",
     },
     {
         name: "Git",
@@ -103,13 +103,13 @@ const toolsItems: TechStackItem[] = [
         name: "Vscode",
         icon: <VscVscodeInsiders />,
         color: "#007ACC",
-        description: "Integrated development environment",
+        description: "Code editor",
     },
     {
         name: "Render",
         icon: <SiRender />,
         color: "#000000",
-        description: "Web platform for deployment",
+        description: "Cloud deployment platform",
     },
     {
         name: "Postman",
@@ -121,20 +121,21 @@ const toolsItems: TechStackItem[] = [
         name: "PgAdmin 4",
         icon: <BiLogoPostgresql />,
         color: "#336791",
-        description: "PostgreSQL database management",
+        description: "Database management tool",
     },
     {
         name: "Neon",
         icon: <AiFillDatabase />,
         color: "#44D62C",
-        description: "Cloud-native PostgreSQL platform",
+        description: "Cloud PostgreSQL service",
     },
     {
         name: "Vite",
         icon: <SiVite />,
         color: "#646CFF",
-        description: "Next generation frontend tooling",
-    }
+        description: "Frontend build tool", 
+    },
+
 ];
 
 export const techStack: TechStackCategory[] = [

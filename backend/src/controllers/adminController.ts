@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import {
     getAllAdminsService,
     getAdminByEmailService,
-    createAdminService,
+    // createAdminService,
     deleteAdminService,
 } from "../models/adminServices.js";
 import type { Admin } from "../models/props.js";

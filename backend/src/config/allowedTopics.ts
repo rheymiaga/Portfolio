@@ -1,4 +1,3 @@
-// config/allowedTopics.ts
 
 export interface AllowedTopicsConfig {
     allowedKeywords: string[];
@@ -7,41 +6,17 @@ export interface AllowedTopicsConfig {
 
 const allowedTopics: AllowedTopicsConfig = {
     allowedKeywords: [
-        "rhey",
-        "rhey louie",
-        "rhey louie miaga",
-        "portfolio",
-        "tech stack",
-        "tech",
-        "technology stack",
-        "technology",
-        "projects",
-        "skills",
-        "experience",
-        "hero",
-        "about",
-        "expected salary",
-        "career goals",
-        "availability",
-        "strengths",
-        "weaknesses",
-        "why hire you",
-        "future plans",
-        "age",
-        "birthday",
-        "bday",
-        "born",
-        "where do i live",
-        "live",
-        "location",
-        "coffee",
-        "hobbies",
-        "fun fact",
-        "dog",
-        "scotch",
-        "hello"
+        "rhey", "louie", "miaga", "rei", "who", "about", "portfolio", "cv", "resume",
+        "hire", "work", "job", "opportunity", "intern", "role", "position",
+        "freelance", "commission", "projects", "service", "available", "availability",
+        "salary", "pay", "rate", "price", "looking",
+        "email", "gmail", "contact", "reach", "message", "socials", "github", "linkedin",
+        "tech", "stack", "languages", "coding", "skills", "react", "typescript", "node",
+        "postgresql", "tailwind", "database", "backend", "frontend", "experience",
+        "age", "birthday", "born", "live", "location", "pasig", "philippines",
+        "coffee", "hobbies", "dog", "scotch", "shih tzu", "roblox", "pandemic",
+        "hello", "hi", "hey", "help", "question", "can you", "tell me"
     ],
-    defaultReply: "Please ask only about Rhey and his portfolio."
+    defaultReply: "I'm Rei, Rhey's AI assistant. I'm trained to discuss his projects, skills, and background. Feel free to ask about his tech stack, or how to contact him!"
 };
-
 export default allowedTopics;
