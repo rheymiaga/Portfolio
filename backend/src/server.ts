@@ -14,7 +14,7 @@ const app = express();
 const allowedOrigins: string[] = [
     "http://localhost:5173",
     "http://localhost:5174",
-    "https://rheymiaga.onrender.com",
+    "https://rheylouiemiaga.onrender.com",
 ];
 
 const corsOptions: CorsOptions = {
