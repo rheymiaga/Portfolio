@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { RiRobot3Fill } from "react-icons/ri";
+import api from "../../api";
 
 export const ReiBot = () => {
     const [openChat, setOpenChat] = useState(false);
@@ -21,34 +22,19 @@ export const ReiBot = () => {
         setInput("");
         setMessages(prev => [...prev, { sender: "user", text: userMessage }]);
         setIsTyping(true);
-
         try {
-            const baseUrl = import.meta.env.VITE_API_URL.endsWith('/')
-                ? import.meta.env.VITE_API_URL.slice(0, -1)
-                : import.meta.env.VITE_API_URL;
-
-            const res = await fetch(`${baseUrl}/chat`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify({ message: userMessage }),
-            });
-
-            if (!res.ok) {
-                const errorData = await res.json().catch(() => ({}));
-                throw new Error(errorData.reply || `Server error: ${res.status}`);
-            }
-
-            const data = await res.json();
-            setMessages(prev => [...prev, { sender: "bot", text: data.reply }]);
+            const res = await api.post("/api/chat", { message: userMessage });
+            setMessages(prev => [...prev, { sender: "bot", text: res.data.reply }]);
         } catch (error: any) {
             console.error("Connection Error:", error);
 
-            const errorMessage = error.message.includes("Failed to fetch")
-                ? "⚠️ Cannot reach Rei. Is the backend running?"
-                : "⚠️ Rei is experiencing a brain freeze.";
+            let errorMessage = "⚠️ Rei is experiencing a brain freeze.";
+
+            if (error.code === "ERR_NETWORK") {
+                errorMessage = "⏳ Server is waking up. Please try again in 30 seconds!";
+            } else if (error.response?.data?.reply) {
+                errorMessage = error.response.data.reply;
+            }
 
             setMessages(prev => [...prev, { sender: "bot", text: errorMessage }]);
         } finally {

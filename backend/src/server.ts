@@ -10,11 +10,12 @@ import adminRouter from "./routes/admin.js"
 dotenv.config();
 
 const app = express();
+app.set('trust proxy', 1);
 
 const allowedOrigins: string[] = [
-    "http://localhost:5173",
-    "http://localhost:3000",
     "https://rheymiaga.onrender.com",
+    "http://localhost:3000",
+    "http://localhost:3001",
 ];
 
 const corsOptions: CorsOptions = {
@@ -33,16 +34,16 @@ const corsOptions: CorsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-app.use("/chat", chatRouter);
-app.use("/api", feedbackRouter,);
+app.use("/api/chat", chatRouter);
+app.use("/api", feedbackRouter);
 app.use("/api/auth", adminRouter);
 
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-    console.error(err.stack);
+    console.error("Server Error Stack:", err.stack);
     res.status(500).json({ status: 500, message: "Internal Server Error" });
 });
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-    console.log(`Backend running on http://localhost:${PORT}`);
+    console.log(`Backend running on port ${PORT}`);
 });
