@@ -26,7 +26,6 @@ router.post("/", async (req: Request, res: Response) => {
     try {
         const chatCompletion = await groq.chat.completions.create({
             messages: [
-                // Inside your chatRouter.ts messages array:
                 {
                     role: "system",
                     content: `You are Rei, the intelligent AI assistant for Rhey Louie Miaga's portfolio.
