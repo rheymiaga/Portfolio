@@ -46,7 +46,7 @@ app.use("/api/chat", chatRouter);
 app.use("/api", feedbackRouter);
 app.use("/api/auth", adminRouter);
 
-app.get("*", (req: Request, res: Response) => {
+app.get("(.*)", (req: Request, res: Response) => {
     if (req.path.startsWith("/api/")) {
         return res.status(404).json({ message: "API endpoint not found" });
     }
