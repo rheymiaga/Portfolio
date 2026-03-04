@@ -28,9 +28,12 @@ const allowedTopics: AllowedTopicsConfig = {
         "why", "reason", "started", "start", "begin", "motivation", "origin", "how",
         "celine", "philomena", "philo", "velasco", "girlfriend", "partner", "artist",
         "education", "bsit", "school", "college", "trimester", "shs", "ict",
-        "milestone", "passion", "goals", "six-digits", "clean code"
+        "milestone", "passion", "goals", "six-digits", "clean code",
+        "sino", "ano", "paano", "kailan", "nasaan", "bakit", "kamusta", "kumusta",
+        "taga", "saan", "marunong", "ka ba", "kilala", "mo", "trabaho", "bayad",
+        "presyo", "magkano", "usap", "tayo", "tulong", "aso", "gf", "kasintahan"
     ],
-    defaultReply: "I'm Rei, Rhey's AI assistant. I'm trained to discuss his projects, skills, and background. Feel free to ask about his tech stack, or how to contact him!"
+    defaultReply: "I'm Rei, Rhey's AI assistant. I'm trained to discuss his projects, skills, and background. Feel free to ask about his tech stack in English or Tagalog! 😊"
 };
 
 export default allowedTopics;
