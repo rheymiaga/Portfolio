@@ -11,7 +11,11 @@ import { FaHtml5 } from "react-icons/fa6";
 import { SiJsonwebtokens } from "react-icons/si";
 import { TbApi } from "react-icons/tb";
 import { SiFramer, } from "react-icons/si";
-import { MdOutlineSecurity } from "react-icons/md";
+import { RiLockPasswordFill } from "react-icons/ri";
+import { MdOutlineSecurity, MdOutlineAdminPanelSettings } from "react-icons/md"; import { FaShieldHalved } from "react-icons/fa6";
+import { VscChecklist } from "react-icons/vsc";
+import { BiCookie } from "react-icons/bi";
+import { AiOutlineCloudUpload } from "react-icons/ai";
 
 interface TechStackItem {
     name: string;
@@ -77,28 +81,10 @@ const backendItems: TechStackItem[] = [
         description: "Server-side runtime",
     },
     {
-        name: "JWT",
-        icon: <SiJsonwebtokens />,
-        color: "#FB015B",
-        description: "Stateless secure authentication",
-    },
-    {
-        name: "RESTful API",
-        icon: <TbApi />,
-        color: "#007ACC",
-        description: "Standardized data endpoints",
-    },
-    {
         name: "Express.js",
         icon: <SiExpress />,
         color: "#000000",
         description: "Server-side framework",
-    },
-    {
-        name: "TypeScript",
-        icon: <BiLogoTypescript />,
-        color: "#3178C6",
-        description: "Robust backend logic",
     },
     {
         name: "PostgreSQL",
@@ -107,10 +93,64 @@ const backendItems: TechStackItem[] = [
         description: "Relational data management",
     },
     {
-        name: "RBAC",
+        name: "TypeScript",
+        icon: <BiLogoTypescript />,
+        color: "#3178C6",
+        description: "Robust backend logic",
+    },
+    {
+        name: "JWT",
+        icon: <SiJsonwebtokens />,
+        color: "#FB015B",
+        description: "Stateless secure authentication",
+    },
+    {
+        name: "Bcrypt",
+        icon: <RiLockPasswordFill />,
+        color: "#FFD700",
+        description: "Secure password hashing",
+    },
+    {
+        name: "Joi",
+        icon: <VscChecklist />,
+        color: "#E91E63",
+        description: "Schema data validation",
+    },
+    {
+        name: "Helmet",
+        icon: <FaShieldHalved />,
+        color: "#A9A9A9",
+        description: "HTTP header security",
+    },
+    {
+        name: "Express-Rate-Limit",
         icon: <MdOutlineSecurity />,
+        color: "#FF4444",
+        description: "API brute-force protection",
+    },
+    {
+        name: "RBAC",
+        icon: <MdOutlineAdminPanelSettings />,
         color: "#FF5733",
         description: "Role-based security",
+    },
+    {
+        name: "Multer",
+        icon: <AiOutlineCloudUpload />,
+        color: "#3178C6",
+        description: "Easy file uploads",
+    },
+    {
+        name: "Cookie Parser",
+        icon: <BiCookie />,
+        color: "#6F4E37",
+        description: "Secure cookie handling",
+    },
+    {
+        name: "RESTful API",
+        icon: <TbApi />,
+        color: "#007ACC",
+        description: "Standardized data endpoints",
     },
 ];
 

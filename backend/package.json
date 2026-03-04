@@ -23,6 +23,7 @@
     "express": "^5.2.1",
     "graceful-fs": "^4.2.11",
     "groq-sdk": "^0.37.0",
+    "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.18.0",
     "typescript": "^5.9.3"

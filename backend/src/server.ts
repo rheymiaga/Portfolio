@@ -4,6 +4,7 @@ import cors, { CorsOptions } from "cors";
 import chatRouter from "./routes/chat.js";
 import feedbackRouter from "./routes/feedbacks.js";
 import adminRouter from "./routes/admin.js";
+import helmet from 'helmet';
 
 const app = express();
 
@@ -28,7 +29,7 @@ const corsOptions: CorsOptions = {
     methods: ["GET", "POST", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
 };
-
+app.use(helmet());
 app.use(cors(corsOptions));
 app.use(express.json());
 
