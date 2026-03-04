@@ -32,9 +32,15 @@ export const Portfolio = ({ user, error }: PortfolioProps) => {
                 <AboutSection />
 
                 {user && (
-                    <div className="text-center">
-                        <a href="/admin" className="text-blue-500 underline text-sm">
-                            Go to Admin
+                    <div className="absolute top-4 right-4 z-50">
+                        <a
+                            href="/admin"
+                            className="group flex items-center gap-2 px-3 py-1.5 bg-black/40 backdrop-blur-md border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 transition-all duration-300 shadow-xl"
+                        >
+                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                            <span className="text-[10px] uppercase tracking-widest text-neutral-300 font-bold poppins">
+                                Admin Panel
+                            </span>
                         </a>
                     </div>
                 )}
