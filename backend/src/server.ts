@@ -1,24 +1,16 @@
 import express from "express";
-import type { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express'
 import dotenv from "dotenv";
 import cors from "cors";
-import type { CorsOptions } from 'cors';
-import path from "path";
-import { fileURLToPath } from "url";
+import type { CorsOptions } from 'cors'
 import chatRouter from "./routes/chat.js";
 import feedbackRouter from "./routes/feedbacks.js";
-import adminRouter from "./routes/admin.js";
+import adminRouter from "./routes/admin.js"
 
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const app = express();
-
 app.set('trust proxy', 1);
-
-const buildPath = path.resolve(__dirname, "../../frontend/dist");
 
 const allowedOrigins: string[] = [
     "https://rheymiaga.onrender.com",
@@ -42,27 +34,9 @@ const corsOptions: CorsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-app.use(express.static(buildPath));
-
 app.use("/api/chat", chatRouter);
 app.use("/api", feedbackRouter);
 app.use("/api/auth", adminRouter);
-
-app.get("/api/health", (_req, res) => {
-    res.json({ status: "ok", service: "Portfolio API" });
-});
-
-app.use((req: Request, res: Response, next: NextFunction) => {
-    if (req.path.startsWith("/api/")) {
-        return res.status(404).json({ message: "API endpoint not found" });
-    }
-
-    res.sendFile(path.join(buildPath, "index.html"), (err) => {
-        if (err) {
-            next(err);
-        }
-    });
-});
 
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
     console.error("Server Error Stack:", err.stack);
@@ -71,6 +45,5 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-    console.log(`🚀 Backend running on port ${PORT}`);
-    console.log(`📁 Serving static files from: ${buildPath}`);
+    console.log(`Backend running on port ${PORT}`);
 });
