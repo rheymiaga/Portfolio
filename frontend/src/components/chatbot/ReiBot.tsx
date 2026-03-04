@@ -25,7 +25,7 @@ export const ReiBot = () => {
             setMessages([
                 {
                     sender: "bot",
-                    text: "Hi! I'm Rei, Rhey's AI assistant. Ask me anything about his projects, skills, or even his dog, Scotch! 🚀"
+                    text: "Hi! I'm Rei, Rhey's AI assistant. 😊 Feel free to ask me about his projects, skills, or even his dog, Scotch! 🐶 I can chat in both English and Tagalog, so just use whichever you're comfortable with!"
                 }
             ]);
         }

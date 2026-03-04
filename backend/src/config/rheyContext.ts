@@ -18,7 +18,7 @@ export const rheyContext = {
     },
     tech_stack: {
         frontend: ["React", "TypeScript", "Framer Motion", "Tailwind CSS", "JavaScript", "CSS3", "HTML5"],
-        backend: ["Node.js", "Express.js", "PostgreSQL", "JWT Auth", "RBAC"],
+        backend: ["Node.js", "Express.js", "PostgreSQL", "JWT Auth", "RBAC", "Bcrypt", "Joi Validation", "Helmet Security", "Express-Rate-Limit", "Cookie Parser", "Multer"],
         tools: ["GitHub", "Git", "VSCode", "Render", "Postman", "PgAdmin 4", "Neon", "Vite"]
     },
     professional: {
