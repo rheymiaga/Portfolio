@@ -94,8 +94,8 @@ export const AdminAnalytics = ({ feedbacks }: { feedbacks: Feedback[] }) => {
                     } as any}
                 />
 
-                <div className="relative z-10 bg-neutral-900 h-full rounded-[2.9rem] p-8 lg:p-10 flex flex-col">
-                    <div className="flex justify-between items-start mb-12">
+                <div className="relative z-10 bg-neutral-900 h-full rounded-[2.9rem] p-6 lg:p-8 flex flex-col">
+                    <div className="flex justify-between items-start space-y-6">
                         <div className="space-y-1">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
@@ -116,7 +116,10 @@ export const AdminAnalytics = ({ feedbacks }: { feedbacks: Feedback[] }) => {
                         </div>
                     </div>
 
-                    <div className="flex-1 w-full mt-auto" style={{ transform: "translateZ(50px)" }}>
+                    <div
+                        className="w-full mt-auto h-72 lg:h-auto lg:flex-1"
+                        style={{ transform: "translateZ(50px)" }}
+                    >
                         <AreaChart
                             className="h-full w-full"
                             data={chartData}

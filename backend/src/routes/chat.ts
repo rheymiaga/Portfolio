@@ -5,14 +5,15 @@ import { rheyContext } from "../config/rheyContext.js";
 
 const router = Router();
 
-const groq = new Groq({
-    apiKey: process.env.GROQ_API_KEY,
-});
 
 router.post("/", async (req: Request, res: Response) => {
     const { message }: { message: string } = req.body;
 
     if (!message) return res.status(400).json({ error: "Message is required" });
+
+    const groq = new Groq({
+        apiKey: process.env.GROQ_API_KEY,
+    });
 
     const lowerMsg = message.toLowerCase();
     const isAllowed = allowedTopics.allowedKeywords.some((keyword: string) =>
