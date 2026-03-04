@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { projectView, projectLinks } from "./ProjectData";
 import type { ProjectCardProps, ShownImage } from "./ProjectData";
 import { AiFillProject } from "react-icons/ai";
@@ -8,6 +8,8 @@ import { IconGrid, SectionHeader } from "./ProjectDetailsStyle";
 
 export const ProjectCard = ({ project }: { project: ProjectCardProps }) => {
     const [shownProject, setShownProject] = useState<ShownImage>("allImages");
+    const [mobileLoaded, setMobileLoaded] = useState(false);
+    const [desktopLoaded, setDesktopLoaded] = useState(false);
 
     return (
         <motion.div
@@ -17,8 +19,19 @@ export const ProjectCard = ({ project }: { project: ProjectCardProps }) => {
             exit="exit"
             viewport={{ once: false, amount: 0.2 }}
             className="rounded-lg shadow-[1px_1px_8px] p-0.5 bg-linear-to-r from-neutral-700 via-neutral-400 to-neutral-700 ">
-            <div className="border bg-neutral-800 brightness-110  relative rounded-lg overflow-hidden border-neutral-600">
+            <div className="border bg-neutral-800 brightness-110 relative rounded-lg overflow-hidden border-neutral-600">
                 <div className="flex mask-bottom overflow-hidden h-72 sm:h-108 md:h-144 hover:scale-102 transition-all duration-300 justify-center rounded-lg p-2 gap-2">
+
+                    <AnimatePresence>
+                        {!mobileLoaded && shownProject !== "usedTechStack" && (
+                            <motion.div
+                                initial={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="absolute top-0 right-1/2 translate-x-1/2 h-72 sm:h-108 md:h-144 w-full max-w-70 bg-neutral-700/50 animate-pulse z-10 rounded-lg"
+                            />
+                        )}
+                    </AnimatePresence>
+
                     {project.mobileVid && shownProject === "mobileImage" ? (
                         <video
                             src={project.mobileVid}
@@ -26,11 +39,13 @@ export const ProjectCard = ({ project }: { project: ProjectCardProps }) => {
                             loop
                             muted
                             playsInline
+                            onCanPlay={() => setMobileLoaded(true)}
                             className="opacity-100 scale-100 absolute top-0 right-1/2 translate-x-1/2 h-72 sm:h-108 md:h-144 z-0 rounded-lg"
                         />
                     ) : (
                         <img
                             loading="lazy"
+                            onLoad={() => setMobileLoaded(true)}
                             className={`${shownProject === "mobileImage"
                                 ? "opacity-100 scale-100 absolute top-0 right-1/2 translate-x-1/2 h-72 sm:h-108 md:h-144 z-0"
                                 : "opacity-0 scale-80 -z-10"} 
@@ -42,19 +57,30 @@ export const ProjectCard = ({ project }: { project: ProjectCardProps }) => {
                     )}
 
                     <div className="flex flex-col gap-2">
-                        {project.desktopVid && shownProject === "desktopImage" ? (
+                        <AnimatePresence>
+                            {!desktopLoaded && shownProject !== "usedTechStack" && (
+                                <motion.div
+                                    initial={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="absolute top-0 left-1/2 -translate-x-1/2 h-72 sm:h-108 md:h-144 w-full bg-neutral-700/50 animate-pulse z-10 rounded-lg"
+                                />
+                            )}
+                        </AnimatePresence>
 
+                        {project.desktopVid && shownProject === "desktopImage" ? (
                             <video
                                 src={project.desktopVid}
                                 autoPlay
                                 loop
                                 muted
                                 playsInline
+                                onCanPlay={() => setDesktopLoaded(true)}
                                 className="flex-1 flex shrink-0 transition-all duration-500 transform rounded-lg opacity-100 scale-100 absolute object-contain top-0 left-1/2 -translate-x-1/2 h-72 sm:h-108 md:h-144 z-0"
                             />
                         ) : (
                             <img
                                 loading="lazy"
+                                onLoad={() => setDesktopLoaded(true)}
                                 className={`flex-1 flex shrink-0 h-48 transition-all duration-500 transform rounded-lg ${shownProject === "desktopImage"
                                     ? "opacity-100 scale-100 absolute object-contain top-0 left-1/2 -translate-x-1/2 h-72 sm:h-108 md:h-144 z-0"
                                     : "opacity-0 scale-80 -z-10"} 
@@ -64,11 +90,10 @@ export const ProjectCard = ({ project }: { project: ProjectCardProps }) => {
                             />
                         )}
 
-
                         <div
                             className={`flex-1 space-y-6 overflow-y-scroll rounded-lg border max-w-lg border-neutral-800/50 backdrop-blur-xl transition-all duration-700 ease-in-out 
                             ${shownProject === "usedTechStack"
-                                    ? "max-w-xl w-full py-10 opacity-100 scale-100 absolute top-0 left-1/2 -translate-x-1/2 h-72 sm:h-108 md:h-144 z-10 bg-neutral-900/80"
+                                    ? "max-w-xl w-full py-10 opacity-100 scale-100 absolute top-0 left-1/2 -translate-x-1/2 h-72 sm:h-108 md:h-144 z-20 bg-neutral-900/80"
                                     : "opacity-0 scale-95 -z-10 bg-neutral-900/40"} 
                                 ${shownProject === "allImages" ? "opacity-100 scale-100 z-0 pb-4" : "scale-80 opacity-0 pb-20"} text-white p-4`}>
                             <div
