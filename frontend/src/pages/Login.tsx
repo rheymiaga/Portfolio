@@ -109,8 +109,8 @@ export const Login = ({ setUser }: LoginProps) => {
                                 )}
                             </AnimatePresence>
                             {[
-                                { id: 'email', label: 'Admin Identifier', type: 'email', val: email, set: setEmail, icon: IoMailOutline },
-                                { id: 'password', label: 'Security Key', type: 'password', val: password, set: setPassword, icon: IoLockClosedOutline }
+                                { id: 'email', label: 'Email', type: 'email', val: email, set: setEmail, icon: IoMailOutline },
+                                { id: 'password', label: 'Password', type: 'password', val: password, set: setPassword, icon: IoLockClosedOutline }
                             ].map((field) => (
                                 <div key={field.id} className="relative group">
                                     <motion.label
@@ -149,7 +149,7 @@ export const Login = ({ setUser }: LoginProps) => {
                             >
                                 {loading ? (
                                     <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
-                                ) : "Initiate Login"}
+                                ) : "Login"}
                             </motion.button>
                         </form>
 
