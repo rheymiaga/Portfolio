@@ -32,7 +32,7 @@ export const Portfolio = ({ user, error }: PortfolioProps) => {
                 <AboutSection />
 
                 {user && (
-                    <div className="absolute top-4 right-4 z-50">
+                    <div className="fixed top-4 right-4 z-50">
                         <a
                             href="/admin"
                             className="group flex items-center gap-2 px-3 py-1.5 bg-black/40 backdrop-blur-md border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 transition-all duration-300 shadow-xl"
