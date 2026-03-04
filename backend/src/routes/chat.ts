@@ -1,16 +1,21 @@
-import { Router } from "express";
-import axios from "axios";
+import { Router, Request, Response } from "express";
+import Groq from "groq-sdk";
 import allowedTopics from "../config/allowedTopics.js";
 import { rheyContext } from "../config/rheyContext.js";
 
 const router = Router();
 
-router.post("/", async (req, res) => {
-    const { message } = req.body;
+const groq = new Groq({
+    apiKey: process.env.GROQ_API_KEY,
+});
+
+router.post("/", async (req: Request, res: Response) => {
+    const { message }: { message: string } = req.body;
 
     if (!message) return res.status(400).json({ error: "Message is required" });
+
     const lowerMsg = message.toLowerCase();
-    const isAllowed = allowedTopics.allowedKeywords.some(keyword =>
+    const isAllowed = allowedTopics.allowedKeywords.some((keyword: string) =>
         lowerMsg.includes(keyword)
     );
 
@@ -19,61 +24,52 @@ router.post("/", async (req, res) => {
     }
 
     try {
-        const response = await axios({
-            method: 'post',
-            url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent`,
-            params: {
-                key: process.env.GEMINI_API_KEY
-            },
-            data: {
-                contents: [
-                    {
-                        role: "user",
-                        parts: [
-                            {
-                                text: `
-                                You are Rei, the intelligent AI assistant for Rhey Louie Miaga's portfolio.
-                                Use the following DATA to answer the user's question accurately.
+        const chatCompletion = await groq.chat.completions.create({
+            messages: [
+                {
+                    role: "system",
+                    content: `You are Rei, the intelligent AI assistant for Rhey Louie Miaga's portfolio.
+                    
+                    DATA ABOUT RHEY:
+                    ${JSON.stringify(rheyContext)}
 
-                                DATA ABOUT RHEY:
-                                ${JSON.stringify(rheyContext, null, 2)}
-
-                                GUIDELINES:
-                                - Be professional, witty, and concise.
-                                - If asked about hiring or contact, always mention mrheylouie@gmail.com.
-                                - If the data doesn't contain the answer, say: "${allowedTopics.defaultReply}"
-                                - Use emojis occasionally (🚀, ☕) to stay friendly.
-                                
-                                USER QUESTION: "${message}"
-                                `
-                            }
-                        ]
-                    }
-                ]
-            }
+                    GUIDELINES:
+                    - Be professional, witty, and concise.
+                    - If asked about hiring or contact, mention mrheylouie@gmail.com.
+                    - If data is missing, say: "${allowedTopics.defaultReply}"
+                    - Use emojis (🚀, ☕) occasionally.`,
+                },
+                {
+                    role: "user",
+                    content: message,
+                },
+            ],
+            model: "llama-3.3-70b-versatile",
+            temperature: 0.7,
+            max_tokens: 500,
         });
 
-        const reply = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        const reply = chatCompletion.choices[0]?.message?.content;
 
         if (!reply) {
-            return res.json({ reply: "I'm not sure about that. Let's talk about Rhey's skills instead! 🚀" });
+            return res.json({
+                reply: "I'm not sure about that. Let's talk about Rhey's skills instead! 🚀",
+            });
         }
 
         res.json({ reply });
-
     } catch (error: any) {
-        const status = error.response?.status;
-        const errorDetails = error.response?.data?.error?.message || error.message;
-
-        console.error(`Gemini Error (${status}):`, errorDetails);
+        console.error("Groq Error:", error);
+        const status = error.status || 500;
 
         if (status === 429) {
             return res.status(429).json({
-                reply: "Whoa! I'm getting a lot of questions. Give me a minute to breathe! ☕"
+                reply: "Whoa! I'm moving too fast. Give me a few seconds to catch my breath! ☕",
             });
         }
-        res.status(status || 500).json({
-            reply: "I'm having a bit of a brain freeze. Please email Rhey at mrheylouie@gmail.com!"
+
+        res.status(status).json({
+            reply: "I'm having a bit of a brain freeze. Please email Rhey at mrheylouie@gmail.com!",
         });
     }
 });
