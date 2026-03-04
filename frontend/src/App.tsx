@@ -23,7 +23,6 @@ const App = () => {
         return;
       }
       try {
-        // This ensures that if the token is valid, the user stays logged in on refresh
         const res = await api.get("/api/auth/me");
         setUser(res.data.user || res.data);
       } catch (err) {
@@ -37,8 +36,8 @@ const App = () => {
   }, []);
 
   if (loading) return (
-    <div className="flex h-screen items-center justify-center bg-[#0B0E14] text-blue-500">
-      <div className="w-10 h-10 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin"></div>
+    <div className="flex h-screen items-center justify-center bg-neutral-950 text-neutral-500">
+      <div className="w-10 h-10 border-4 border-neutral-500/20 border-t-neutral-500 rounded-full animate-spin"></div>
     </div>
   );
 
@@ -46,9 +45,7 @@ const App = () => {
   return (
 
     <Routes>
-      {/* Portfolio is usually public, but we pass user status just in case */}
       <Route path="/" element={<Portfolio user={user} />} />
-
       <Route
         path="/login"
         element={user ? <Navigate to="/admin" replace /> : <Login setUser={setUser} />}

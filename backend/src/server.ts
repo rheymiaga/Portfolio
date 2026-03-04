@@ -1,15 +1,13 @@
-import express from "express";
-import type { Request, Response, NextFunction } from 'express'
-import dotenv from "dotenv";
-import cors from "cors";
-import type { CorsOptions } from 'cors'
+import 'dotenv/config';
+import express, { Request, Response, NextFunction } from "express";
+import cors, { CorsOptions } from "cors";
 import chatRouter from "./routes/chat.js";
 import feedbackRouter from "./routes/feedbacks.js";
-import adminRouter from "./routes/admin.js"
-
-dotenv.config();
+import adminRouter from "./routes/admin.js";
 
 const app = express();
+
+const PORT = process.env.PORT || 3001;
 app.set('trust proxy', 1);
 
 const allowedOrigins: string[] = [
@@ -40,10 +38,12 @@ app.use("/api/auth", adminRouter);
 
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
     console.error("Server Error Stack:", err.stack);
-    res.status(500).json({ status: 500, message: "Internal Server Error" });
+    res.status(500).json({
+        status: 500,
+        message: "Internal Server Error"
+    });
 });
 
-const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Backend running on port ${PORT}`);
 });
