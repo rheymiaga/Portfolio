@@ -2,9 +2,14 @@ import { useState, useRef, useEffect } from "react";
 import { RiRobot3Fill } from "react-icons/ri";
 import api from "../../api";
 
+interface Message {
+    sender: "user" | "bot";
+    text: string;
+}
+
 export const ReiBot = () => {
     const [openChat, setOpenChat] = useState(false);
-    const [messages, setMessages] = useState<{ sender: "user" | "bot"; text: string }[]>([]);
+    const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isTyping, setIsTyping] = useState(false);
     const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -15,23 +20,42 @@ export const ReiBot = () => {
         }
     }, [messages, isTyping]);
 
+    useEffect(() => {
+        if (openChat && messages.length === 0) {
+            setMessages([
+                {
+                    sender: "bot",
+                    text: "Hi! I'm Rei, Rhey's AI assistant. Ask me anything about his projects, skills, or even his dog, Scotch! 🚀"
+                }
+            ]);
+        }
+    }, [openChat, messages.length]);
+
     const sendMessage = async () => {
-        if (!input.trim()) return;
+        if (!input.trim() || isTyping) return;
 
         const userMessage = input;
         setInput("");
         setMessages(prev => [...prev, { sender: "user", text: userMessage }]);
         setIsTyping(true);
+
         try {
             const res = await api.post("/api/chat", { message: userMessage });
-            setMessages(prev => [...prev, { sender: "bot", text: res.data.reply }]);
+
+            if (res.data && res.data.reply) {
+                setMessages(prev => [...prev, { sender: "bot", text: res.data.reply }]);
+            } else {
+                throw new Error("Empty response from server");
+            }
         } catch (error: any) {
-            console.error("Connection Error:", error);
+            console.error("Rei Connection Error:", error);
 
             let errorMessage = "⚠️ Rei is experiencing a brain freeze.";
 
-            if (error.code === "ERR_NETWORK") {
-                errorMessage = "⏳ Server is waking up. Please try again in 30 seconds!";
+            if (error.response?.status === 429) {
+                errorMessage = "☕ Whoa! I'm moving a bit too fast. Give me a moment to breathe!";
+            } else if (error.code === "ERR_NETWORK") {
+                errorMessage = "⏳ Network error. The server might be waking up or your internet is offline.";
             } else if (error.response?.data?.reply) {
                 errorMessage = error.response.data.reply;
             }
@@ -94,6 +118,7 @@ export const ReiBot = () => {
                             </div>
                         )}
                     </div>
+
                     <div className="flex items-center gap-2 p-3 border-t border-white/30 bg-neutral-900/80">
                         <input
                             type="text"

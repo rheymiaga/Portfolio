@@ -26,18 +26,23 @@ router.post("/", async (req: Request, res: Response) => {
     try {
         const chatCompletion = await groq.chat.completions.create({
             messages: [
+                // Inside your chatRouter.ts messages array:
                 {
                     role: "system",
                     content: `You are Rei, the intelligent AI assistant for Rhey Louie Miaga's portfolio.
-                    
-                    DATA ABOUT RHEY:
+    
+                     DATA ABOUT RHEY:
                     ${JSON.stringify(rheyContext)}
 
                     GUIDELINES:
-                    - Be professional, witty, and concise.
-                    - If asked about hiring or contact, mention mrheylouie@gmail.com.
-                    - If data is missing, say: "${allowedTopics.defaultReply}"
-                    - Use emojis (🚀, ☕) occasionally.`,
+                        - Be professional, witty, and concise.
+                        - If asked about hiring or contact, mention mrheylouie@gmail.com.
+                        - If data is missing, say: "${allowedTopics.defaultReply}"
+                        - USE EMOJIS FREQUENTLY: 
+                            - Use 🐶 when mentioning Scotch.
+                            - Use ❤️ or ✨ when mentioning Philo (Celine).
+                            - Use 🚀, 💻, or ☕ for tech and coffee talk.
+                            - Use 😊 or 👋 for greetings.`
                 },
                 {
                     role: "user",
