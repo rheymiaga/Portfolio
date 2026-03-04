@@ -16,8 +16,6 @@ export const tabContent: Record<string, React.ReactNode> = {
                 </span>,
                 <span className="text-pink-400">{`  return (`}</span>,
                 <span className="text-blue-400">{`    <section>`}</span>,
-
-                // Single <p> block, but split into rows
                 <span className="text-blue-400">{`      <h1>`}</span>,
                 <span className="text-slate-200">{"         "}
                     Background
@@ -67,12 +65,10 @@ export const tabContent: Record<string, React.ReactNode> = {
                     key={i}
                     className="flex w-full group hover:bg-neutral-700 transition-colors"
                 >
-                    {/* Line numbers */}
-                    <span className="w-6 flex shrink-0 text-right pr-2 bg-neutral-800 text-neutral-500 select-none">
+                    <span className="w-6 flex shrink-0 text-right pr-2 border-r border-neutral-800 bg-neutral-900 text-neutral-500 select-none">
                         {i + 1}
                     </span>
 
-                    {/* Code content */}
                     <div className="flex-1">
                         <span className="px-2 whitespace-pre">{line}</span>
                     </div>
@@ -122,7 +118,7 @@ export const tabContent: Record<string, React.ReactNode> = {
                     key={i}
                     className="flex w-full group hover:bg-neutral-700 transition-colors"
                 >
-                    <span className="w-6 flex shrink-0 text-right pr-2 bg-neutral-800 text-neutral-500 select-none">
+                    <span className="w-6 flex shrink-0 text-right pr-2 border-r border-neutral-800 bg-neutral-900 text-neutral-500 select-none">
                         {i + 1}
                     </span>
                     <div className="flex-1">
@@ -189,7 +185,7 @@ export const tabContent: Record<string, React.ReactNode> = {
                     key={i}
                     className="flex w-full group hover:bg-neutral-700 transition-colors"
                 >
-                    <span className="w-6 flex shrink-0 text-right pr-2 bg-neutral-800 text-neutral-500 select-none">
+                    <span className="w-6 flex shrink-0 text-right pr-2 border-r border-neutral-800 bg-neutral-900 text-neutral-500 select-none">
                         {i + 1}
                     </span>
                     <div className="flex-1">

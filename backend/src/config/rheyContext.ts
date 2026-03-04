@@ -17,8 +17,8 @@ export const rheyContext = {
         passion: "Minimalist UI/UX design and clean, efficient code."
     },
     tech_stack: {
-        frontend: ["React", "TypeScript", "JavaScript", "Tailwind CSS", "CSS3", "HTML5"],
-        backend: ["Node.js", "Express.js", "PostgreSQL"],
+        frontend: ["React", "TypeScript", "Framer Motion", "Tailwind CSS", "JavaScript", "CSS3", "HTML5"],
+        backend: ["Node.js", "Express.js", "PostgreSQL", "JWT Auth", "RBAC"],
         tools: ["GitHub", "Git", "VSCode", "Render", "Postman", "PgAdmin 4", "Neon", "Vite"]
     },
     professional: {

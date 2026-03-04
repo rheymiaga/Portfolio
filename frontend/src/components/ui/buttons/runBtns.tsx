@@ -17,7 +17,7 @@ export const RunBtns: React.FC<RunBtnsProps> = ({ tabContent, activeTab, setActi
                     title={`C:\\Portfolio\\ ${tab}`}
                     onClick={() => setActiveTab(tab)}
                     className={`px-3 py-2 gap-1 transition-colors flex items-center ${activeTab === tab
-                            ? "bg-neutral-800 text-neutral-100 border-t border-blue-500 border-b-0"
+                            ? "bg-neutral-900 text-neutral-100 border-t border-blue-500 border-b-0"
                             : "hover:bg-neutral-700 text-neutral-400 border-r border-b border-neutral-700"
                         }`}
                 >

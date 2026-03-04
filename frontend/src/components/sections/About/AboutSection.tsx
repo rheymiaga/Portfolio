@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Scotch from '../../../assets/images/SccotchPixelated.png';
-import { heroVariants, cardVariants, sectionVariants, } from '../../../animations/Variants';
+import { heroVariants, cardVariants, sectionVariants } from '../../../animations/Variants';
 import { FaRegWindowMaximize, FaRegWindowRestore } from 'react-icons/fa6';
 import { IoSearchOutline } from 'react-icons/io5';
 import { tabContent } from './AboutData';
@@ -11,43 +11,46 @@ import { WebsiteModal } from '../../ui/modals/websiteModal';
 import { TerminalModal } from '../../ui/modals/terminalModal';
 
 export const AboutSection = () => {
-    const [activeTab, setActiveTab] = useState("Backgroud.tsx");
+    const [activeTab, setActiveTab] = useState("Background.tsx");
     const [showLive, setShowLive] = useState(false);
     const [output, setOutput] = useState<React.ReactNode | null>(null);
     const [maximize, setmaximize] = useState(false);
 
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+    const springConfig = { damping: 35, stiffness: 120, mass: 1 };
+    const smoothX = useSpring(mouseX, springConfig);
+    const smoothY = useSpring(mouseY, springConfig);
+    const bgMoveX = useTransform(smoothX, [-0.5, 0.5], ["3%", "-3%"]);
+    const bgMoveY = useTransform(smoothY, [-0.5, 0.5], ["3%", "-3%"]);
+
+    const bgRotateX = useTransform(smoothY, [-0.5, 0.5], [4, -4]);
+    const bgRotateY = useTransform(smoothX, [-0.5, 0.5], [-4, 4]);
+
+    const cardRotateX = useTransform(smoothY, [-0.5, 0.5], [10, -10]);
+    const cardRotateY = useTransform(smoothX, [-0.5, 0.5], [-10, 10]);
+
     useEffect(() => {
-        setActiveTab('Background.tsx')
+        setActiveTab('Background.tsx');
         const handleMouseMove = (e: MouseEvent) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 10;
-            const y = (e.clientY / window.innerHeight - 0.5) * 10;
-            const bg = document.getElementById('scotch-bg');
-            if (bg) {
-                bg.style.transform = `translate(${x}px, ${y}px) scale(1.05)`;
-            }
+            mouseX.set(e.clientX / window.innerWidth - 0.5);
+            mouseY.set(e.clientY / window.innerHeight - 0.5);
         };
         window.addEventListener('mousemove', handleMouseMove);
         return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
+    }, [mouseX, mouseY]);
 
     const handleRunCode = () => {
         switch (activeTab) {
             case "Background.tsx":
-                setOutput(
-                    <BackgroundOutput />
-                );
+                setOutput(<BackgroundOutput />);
                 break;
             case "SomeFacts.tsx":
-                setOutput(
-                    <SomeFactsOutput />
-                );
+                setOutput(<SomeFactsOutput />);
                 break;
             case "Scotch.tsx":
-                setOutput(
-                    <ScotchOutput />
-                );
+                setOutput(<ScotchOutput />);
                 break;
-
             default:
                 setOutput("No output available.");
         }
@@ -55,55 +58,66 @@ export const AboutSection = () => {
 
     return (
         <motion.section
-            className="relative min-h-screen flex items-center justify-center  text-neutral-100 overflow-hidden"
+            className="relative min-h-screen flex items-center justify-center text-neutral-100 overflow-hidden bg-neutral-950"
             variants={sectionVariants}
             initial="hidden"
             whileInView="visible"
             exit="exit"
+            style={{ perspective: "1500px" }}
         >
             <motion.div
                 id="scotch-bg"
-                className="absolute inset-0 bg-cover bg-center will-change-transform transition-transform duration-500 ease-out opacity-10"
-                style={{ backgroundImage: `url(${Scotch})` }}
+                className="absolute inset-0 bg-cover bg-center will-change-transform opacity-15 pointer-events-none"
+                style={{
+                    backgroundImage: `url(${Scotch})`,
+                    x: bgMoveX,
+                    y: bgMoveY,
+                    rotateX: bgRotateX,
+                    rotateY: bgRotateY,
+                    scale: 1.15
+                }}
                 variants={heroVariants}
             />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0a0a0a_85%)] pointer-events-none z-1" />
+
             <WebsiteModal
                 showLive={showLive}
                 setShowLive={setShowLive}
                 activeTab={activeTab}
                 output={output}
             />
-
             <motion.div
-                className={`relative z-10 bg-neutral-800 rounded-lg shadow-2xl border border-neutral-700 overflow-hidden font-mono
-          ${maximize ? "w-32 h-24 sm:w-48 sm:h-32" : "w-[90%] sm:w-[80%] md:w-[50%] h-60 md:h-76"}`}
-                whileHover={{ rotateY: 6, rotateX: -3, scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                className={`relative z-10 bg-neutral-900/90 backdrop-blur-xl rounded-xl shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] border border-neutral-700/50 overflow-hidden font-mono
+                ${maximize ? "w-40 h-28 sm:w-56 sm:h-36" : "w-[92%] sm:w-[85%] md:w-162.5 h-76 md:h-112.5"}`}
+                style={{
+                    rotateX: cardRotateX,
+                    rotateY: cardRotateY,
+                    transformStyle: "preserve-3d"
+                }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 variants={cardVariants}
                 drag
                 dragConstraints={{ left: -100, right: 100, top: -100, bottom: 100 }}
-                dragElastic={0.2}
+                dragElastic={0.1}
                 dragMomentum={false}
             >
-                <div className="flex items-center justify-between bg-neutral-900 px-3 py-2 text-xs border-b border-neutral-700 text-neutral-300">
+
+                <div className="flex items-center justify-between bg-neutral-950/80 px-4 py-3 text-xs border-b border-neutral-800 text-neutral-400">
                     <div className="flex gap-2">
-                        <span className="w-3 h-3 rounded-full bg-red-500"></span>
+                        <span className="w-3 h-3 rounded-full bg-[#ff5f56] shadow-inner"></span>
                         <span
-                            onClick={() => setmaximize(!maximize)}
-                            className="w-3 h-3 rounded-full bg-yellow-500 cursor-pointer"
-                            title={maximize ? "Restore" : "Minimize"}
+                            className="w-3 h-3 rounded-full bg-[#ffbd2e]  shadow-inner"
                         ></span>
-                        <span className="w-3 h-3 rounded-full bg-green-500"></span>
+                        <span className="w-3 h-3 rounded-full bg-[#27c93f] shadow-inner"></span>
                     </div>
-                    <h1 className={`font-bold px-4 sm:px-8 py-1 ${maximize ? "hidden" : "flex"} bg-neutral-800 rounded-lg border border-neutral-700  items-center gap-1`}>
-                        <IoSearchOutline /> About Me
+                    <h1 className={`font-bold px-4 md:px-8 lg:px-12 py-1.5 ${maximize ? "hidden" : "flex"} bg-neutral-900 rounded-md border border-neutral-800 items-center gap-2 text-neutral-200 tracking-tight`}>
+                        <IoSearchOutline className="text-blue-400" /> About Me
                     </h1>
-                    <div className="flex items-center gap-2">
-                        <span className="italic hidden sm:inline">VS Code</span>
+                    <div className="flex items-center gap-3">
+                        <span className="italic hidden sm:inline text-[10px] opacity-50 uppercase tracking-widest">Vscode</span>
                         <button
                             onClick={() => setmaximize(!maximize)}
-                            className="p-2 hover:bg-neutral-700 rounded"
-                            title={maximize ? "Restore" : "Maximize"}
+                            className="p-1.5 hover:bg-neutral-800 rounded-md transition-colors"
                         >
                             {maximize ? <FaRegWindowMaximize /> : <FaRegWindowRestore />}
                         </button>
@@ -111,8 +125,8 @@ export const AboutSection = () => {
                 </div>
 
                 {!maximize && (
-                    <>
-                        <div className="flex items-center bg-neutral-900 text-xs overflow-x-auto text-neutral-300 border-b border-neutral-700">
+                    <div className="flex flex-col h-full">
+                        <div className="flex items-center bg-neutral-950/80 text-xs overflow-x-auto text-neutral-400 border-b border-neutral-800/50">
                             <RunBtns
                                 tabContent={tabContent}
                                 activeTab={activeTab}
@@ -120,8 +134,11 @@ export const AboutSection = () => {
                                 handleRunCode={handleRunCode}
                             />
                         </div>
-                        <div className="p-4 text-xs sm:text-sm bg-neutral-800 leading-relaxed overflow-auto h-40 md:h-56 relative">
-                            {tabContent[activeTab]}
+
+                        <div className="p-6 text-xs sm:text-sm bg-neutral-900 leading-relaxed overflow-auto flex-1 relative ">
+                            <div className="opacity-80">
+                                {tabContent[activeTab]}
+                            </div>
                             <TerminalModal
                                 output={output}
                                 setShowLive={setShowLive}
@@ -130,7 +147,7 @@ export const AboutSection = () => {
                                 activeTab={activeTab}
                             />
                         </div>
-                    </>
+                    </div>
                 )}
             </motion.div>
         </motion.section>

@@ -11,6 +11,8 @@ const allowedTopics: AllowedTopicsConfig = {
         "freelance", "commission", "projects", "service", "available", "availability",
         "salary", "pay", "rate", "price", "looking",
         "email", "gmail", "contact", "reach", "message", "socials", "github", "linkedin",
+        "jwt", "auth", "authentication", "rbac", "permissions", "roles", "security",
+        "framer motion", "animations", "motion", "3d", "interactive",
         "tech", "stack", "languages", "coding", "skills", "react", "typescript", "node",
         "postgresql", "tailwind", "database", "backend", "frontend", "experience",
         "age", "birthday", "born", "live", "location", "pasig", "philippines",
