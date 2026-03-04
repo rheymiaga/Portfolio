@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { FooterLinks } from "./FooterLinks";
 import api from "../../api";
 
@@ -20,6 +20,49 @@ export const Footer = () => {
         return id;
     };
 
+    const resetCooldown = useCallback(() => {
+        localStorage.removeItem("feedbackExpiry");
+        localStorage.setItem("feedbackCount", "0");
+        setRemaining(2);
+        setCooldown(0);
+    }, []);
+
+    useEffect(() => {
+        const storedExpiry = localStorage.getItem("feedbackExpiry");
+        const storedCount = localStorage.getItem("feedbackCount") || "0";
+
+        if (storedExpiry) {
+            const now = Date.now();
+            const expiry = parseInt(storedExpiry, 10);
+
+            if (now < expiry) {
+                setRemaining(0);
+                setCooldown(Math.floor((expiry - now) / 1000));
+            } else {
+                resetCooldown();
+            }
+        } else {
+            const count = parseInt(storedCount, 10);
+            setRemaining(Math.max(0, 2 - count));
+        }
+    }, [resetCooldown]);
+
+    useEffect(() => {
+        if (cooldown <= 0) return;
+
+        const interval = setInterval(() => {
+            setCooldown((prev) => {
+                if (prev <= 1) {
+                    resetCooldown();
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [cooldown, resetCooldown]);
+
     useEffect(() => {
         if (error || success) {
             const timer = setTimeout(() => {
@@ -30,81 +73,32 @@ export const Footer = () => {
         }
     }, [error, success]);
 
-    useEffect(() => {
-        const storedExpiry = localStorage.getItem("feedbackExpiry");
-        const storedCount = localStorage.getItem("feedbackCount");
-
-        if (storedExpiry) {
-            const now = Date.now();
-            const expiry = parseInt(storedExpiry, 10);
-
-            if (now < expiry) {
-                setRemaining(0);
-                setCooldown(Math.floor((expiry - now) / 1000));
-            } else {
-                // Timer finished: Clear everything
-                localStorage.removeItem("feedbackExpiry");
-                localStorage.setItem("feedbackCount", "0");
-                setRemaining(2);
-                setCooldown(0);
-            }
-        } else if (storedCount) {
-            const count = parseInt(storedCount, 10);
-            setRemaining(Math.max(0, 2 - count));
-        }
-    }, []);
-
-    useEffect(() => {
-        if (cooldown > 0) {
-            const interval = setInterval(() => {
-                setCooldown((prev) => {
-                    if (prev <= 1) {
-                        // Reset state when timer hits zero
-                        localStorage.removeItem("feedbackExpiry");
-                        localStorage.setItem("feedbackCount", "0");
-                        setRemaining(2);
-                        return 0;
-                    }
-                    return prev - 1;
-                });
-            }, 1000);
-            return () => clearInterval(interval);
-        }
-    }, [cooldown]);
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!text.trim()) return;
+        if (!text.trim() || loading) return;
+
+        if (remaining <= 0 && cooldown > 0) {
+            setError("You are currently on cooldown.");
+            return;
+        }
 
         setLoading(true);
         setError(null);
         setSuccess(null);
 
-        const deviceId = getDeviceId();
-
         try {
-            if (remaining <= 0) {
-                setError("Submission limit reached for now.");
-                setLoading(false);
-                return;
-            }
-
-            // SIMPLIFIED: Let the backend handle the "Anonymous" string
-            await api.post(
-                "/api/feedbacks",
-                {
-                    name: name.trim() || null,
-                    text: text.trim(),
-                    deviceId
-                },
-                { headers: { "Content-Type": "application/json" } }
-            );
+            await api.post("/api/feedbacks", {
+                name: name.trim() || null,
+                text: text.trim(),
+                deviceId: getDeviceId()
+            });
 
             const currentCount = parseInt(localStorage.getItem("feedbackCount") || "0", 10);
             const newCount = currentCount + 1;
             localStorage.setItem("feedbackCount", newCount.toString());
 
-            setRemaining(Math.max(0, 2 - newCount));
+            const newRemaining = Math.max(0, 2 - newCount);
+            setRemaining(newRemaining);
 
             if (newCount >= 2) {
                 const twelveHoursInMs = 12 * 60 * 60 * 1000;
@@ -115,16 +109,16 @@ export const Footer = () => {
 
             setName("");
             setText("");
-            setSuccess("Message sent. I'll get back to you soon.");
+            setSuccess("Feedback received! Thanks for helping me grow. ✨");
         } catch (err: any) {
-            const msg = err.response?.data?.message || "Failed to submit feedback";
-            setError(msg);
+            setError(err.response?.data?.message || "Failed to send. Try again later.");
         } finally {
             setLoading(false);
         }
     };
 
     const formatTime = (seconds: number) => {
+        if (seconds <= 0) return "0h 0m 0s";
         const h = Math.floor(seconds / 3600);
         const m = Math.floor((seconds % 3600) / 60);
         const s = seconds % 60;
@@ -161,36 +155,42 @@ export const Footer = () => {
                             type="text"
                             placeholder="Name (Optional)"
                             value={name}
+                            disabled={loading || remaining <= 0}
                             onChange={(e) => setName(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-neutral-200 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+                            className="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-neutral-200 text-sm focus:outline-none focus:border-indigo-500 transition-colors disabled:opacity-50"
                         />
                         <textarea
                             placeholder="What's on your mind?"
                             rows={3}
                             value={text}
-                            onChange={(e) => setText(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-neutral-200 text-sm focus:outline-none focus:border-indigo-500 transition-colors resize-none"
+                            disabled={loading || remaining <= 0}
+                            onChange={(e) => {
+                                setText(e.target.value);
+                                if (error) setError(null);
+                            }}
+                            className="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-neutral-200 text-sm focus:outline-none focus:border-indigo-500 transition-colors resize-none disabled:opacity-50"
                         ></textarea>
 
                         <button
                             type="submit"
-                            disabled={loading || remaining <= 0}
-                            className="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-xl text-sm font-semibold transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-indigo-900/20"
+                            disabled={loading || remaining <= 0 || !text.trim()}
+                            className="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-xl text-sm font-semibold transition-all disabled:bg-neutral-800 disabled:text-neutral-500 disabled:cursor-not-allowed shadow-lg"
                         >
-                            {loading ? "Sending..." : "Send Message"}
+                            {loading ? "Sending..." : remaining <= 0 ? "On Cooldown" : "Send Message"}
                         </button>
 
-                        <div className="min-h-5">
-                            {error && <p className="text-red-400 text-xs animate-pulse">{error}</p>}
-                            {success && <p className="text-emerald-400 text-xs font-medium">{success}</p>}
+                        <div className="min-h-5 flex items-center justify-center">
+                            {error && <p className="text-red-400 text-xs text-center">{error}</p>}
+                            {success && <p className="text-emerald-400 text-xs font-medium text-center">{success}</p>}
                             {!error && !success && (
                                 remaining > 0 ? (
                                     <p className="text-neutral-500 text-xs">
-                                        {remaining} attempt{remaining > 1 ? "s" : ""} available
+                                        {remaining} attempt{remaining > 1 ? "s" : ""} left
                                     </p>
                                 ) : (
-                                    <p className="text-amber-500 text-xs">
-                                        Cooldown active: {formatTime(cooldown)}
+                                    <p className="text-amber-500 text-xs flex items-center gap-1">
+                                        <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
+                                        Cooldown: {formatTime(cooldown)}
                                     </p>
                                 )
                             )}
