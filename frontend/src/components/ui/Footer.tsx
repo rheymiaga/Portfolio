@@ -109,7 +109,7 @@ export const Footer = () => {
 
             setName("");
             setText("");
-            setSuccess("Feedback sent!, Thankyou.");
+            setSuccess("Feedback sent! Thankyou.");
         } catch (err: any) {
             setError(err.response?.data?.message || "Failed to send. Try again later.");
         } finally {
