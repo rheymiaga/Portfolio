@@ -88,7 +88,7 @@ export const AboutSection = () => {
             />
             <motion.div
                 className={`relative z-10 bg-neutral-900/90 backdrop-blur-xl rounded-xl shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] border border-neutral-700/50 overflow-hidden font-mono
-                ${maximize ? "w-40 h-28 sm:w-56 sm:h-36" : "w-[92%] sm:w-[85%] md:w-162.5 h-76 md:h-112.5"}`}
+                ${maximize ? "w-40 h-28 sm:w-56 sm:h-36" : "w-[94%] sm:w-[85%] md:w-162.5 h-76 md:h-112.5"}`}
                 style={{
                     rotateX: cardRotateX,
                     rotateY: cardRotateY,

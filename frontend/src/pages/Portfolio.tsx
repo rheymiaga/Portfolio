@@ -22,6 +22,20 @@ export const Portfolio = ({ user, error }: PortfolioProps) => {
     return (
 
         <>
+            <div className="fixed top-0 left-0 w-full z-9999 overflow-hidden">
+                <div className="absolute inset-0 bg-neutral-900/60 backdrop-blur-md border-b border-white/5" />
+                <div className="absolute bottom-0 left-0 h-px w-full bg-linear-to-r from-transparent via-neutral-500/50 to-transparent" />
+                <div className="relative flex items-center justify-center gap-3 py-2.5 px-4">
+                    <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neutral-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-neutral-500"></span>
+                    </span>
+
+                    <h3 className="text-[10px] md:text-xs text-neutral-300 poppins font-medium tracking-[0.2em] uppercase">
+                        Update in Progress <span className="text-neutral-500 mx-1">•</span> coming soon
+                    </h3>
+                </div>
+            </div>
             <ReiBot />
             <div className="flex flex-col max-w-4xl mx-auto gap-16 py-20 px-3 overflow-hidden">
                 {error && <p className="text-red-500 text-center mb-4">{error}</p>}
