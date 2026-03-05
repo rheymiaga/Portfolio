@@ -32,7 +32,6 @@ export const ProjectsSection = () => {
                     Projects
                 </motion.h2>
 
-
                 <button
                     className="p-2 rounded-full hover:bg-white/10 transition-colors duration-300"
                     onClick={(e) => {

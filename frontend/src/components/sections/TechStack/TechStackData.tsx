@@ -25,6 +25,7 @@ interface TechStackItem {
 }
 interface TechStackCategory {
     category: string;
+    description: string
     items: TechStackItem[];
 }
 
@@ -207,21 +208,40 @@ const toolsItems: TechStackItem[] = [
 
 export const techStack: TechStackCategory[] = [
     {
-        category: "All",
-        items: [...frontendItems,
-        ...backendItems.filter(item => item.name !== 'TypeScript'),
-        ...toolsItems],
+        category: "Mastery",
+        description: "My primary powerhouse stack for building scalable applications.",
+        items: [
+            ...frontendItems.filter(i =>
+                ["React", "TypeScript", "Tailwind CSS", "Framer Motion"].includes(i.name)
+            ),
+            ...backendItems.filter(i =>
+                ["Node.js", "Express.js", "PostgreSQL", "Helmet"].includes(i.name)
+            ),
+        ],
     },
     {
-        category: "Frontend",
-        items: frontendItems,
+        category: "All",
+        description: "A comprehensive index of the technologies and libraries I have worked with across various projects.",
+        items: [
+            ...frontendItems,
+            ...backendItems.filter(item => item.name !== 'TypeScript'),
+            ...toolsItems
+        ],
     },
     {
         category: "Backend",
+        description: "Server-side architecture and security-first development.",
         items: backendItems,
+    },
+
+    {
+        category: "Frontend",
+        description: "Client-side technologies focused on performance and UX.",
+        items: frontendItems,
     },
     {
         category: "Tools & Platforms",
+        description: "The ecosystem that powers my development workflow.",
         items: toolsItems,
     },
 ]

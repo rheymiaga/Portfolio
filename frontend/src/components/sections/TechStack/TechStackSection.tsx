@@ -6,15 +6,15 @@ import { IoChevronDown } from 'react-icons/io5';
 import { cardVariants, containerVariants, itemVariants, sectionVariants } from '../../../animations/Variants';
 
 export const TechStackSection = () => {
-    const [filter, setFilter] = useState<'all' | 'Frontend' | 'Backend' | 'Tools & Platforms'>('all');
+    const [filter, setFilter] = useState<'Mastery' | 'Frontend' | 'Backend' | 'Tools & Platforms' | 'All'>('Mastery');
     const [isOpen, setIsOpen] = useState(false);
 
-    const displayedCategories = filter === 'all'
+    const displayedCategories = filter === 'Mastery'
         ? [techStack[0]]
         : techStack.filter(cat => cat.category === filter);
 
     return (
-        <section className="w-full relative overflow-visible py-16 px-3">
+        <section className="w-full relative overflow-visible py-8 px-3">
 
             <motion.div
                 variants={cardVariants}
@@ -37,7 +37,6 @@ export const TechStackSection = () => {
             >
                 <motion.div
                     variants={sectionVariants}
-                    className="mb-6"
                 >
                     <div className='flex items-center justify-between gap-4 mb-3'>
                         <motion.div variants={itemVariants}>
@@ -56,7 +55,7 @@ export const TechStackSection = () => {
                                 className="px-3.5 md:px-4 py-1 md:py-1.5 rounded-lg transition-all duration-200 text-xs font-semibold poppins uppercase tracking-widest border bg-neutral-900/40 text-neutral-300 border-neutral-700/30 hover:border-neutral-600/45 hover:bg-neutral-800/50 flex items-center gap-2 backdrop-blur-md"
                             >
                                 <span className="text-[10px]">
-                                    {filter === 'all' ? 'All' : filter === 'Tools & Platforms' ? 'Tools' : filter}
+                                    {filter === 'Mastery' ? 'Mastery' : filter === 'Tools & Platforms' ? 'Tools' : filter}
                                 </span>
                                 <motion.div
                                     animate={{ rotate: isOpen ? 180 : 0 }}
@@ -76,7 +75,7 @@ export const TechStackSection = () => {
                                         transition={{ duration: 0.1, type: 'spring', stiffness: 400, damping: 25 }}
                                         className="absolute top-full right-0 mt-2 rounded-lg border border-neutral-700/30 bg-neutral-800/95 backdrop-blur-lg overflow-hidden shadow-lg z-50 text-left w-40"
                                     >
-                                        {(['all', 'Frontend', 'Backend', 'Tools & Platforms'] as const).map((option) => (
+                                        {(['Mastery', 'Frontend', 'Backend', 'Tools & Platforms', 'All'] as const).map((option) => (
                                             <motion.button
                                                 key={option}
                                                 onClick={() => {
@@ -89,7 +88,7 @@ export const TechStackSection = () => {
                                                     : 'text-neutral-400 hover:text-neutral-300'
                                                     }`}
                                             >
-                                                {option === 'all' ? 'All' : option === 'Tools & Platforms' ? 'Tools' : option}
+                                                {option === 'Mastery' ? 'Mastery' : option === 'Tools & Platforms' ? 'Tools' : option}
                                             </motion.button>
                                         ))}
                                     </motion.div>
@@ -101,13 +100,6 @@ export const TechStackSection = () => {
                     <motion.div variants={itemVariants} className="mb-3">
                         <div className="h-0.5 w-14 bg-linear-to-r from-neutral-500/60 via-neutral-500/40 to-transparent rounded-full" />
                     </motion.div>
-
-                    <motion.p
-                        variants={itemVariants}
-                        className="text-[12px] md:text-base poppins text-neutral-400 leading-relaxed font-medium"
-                    >
-                        Tools and Frameworks Behind My Work
-                    </motion.p>
                 </motion.div>
 
                 <AnimatePresence mode="wait">
@@ -121,13 +113,23 @@ export const TechStackSection = () => {
                                 exit="hidden"
                             >
                                 <motion.div variants={itemVariants} className="mb-6">
-                                    <div className="flex items-center gap-2.5 mb-2.5">
-                                        <h3 className="text-base md:text-2xl font-semibold poppins text-white tracking-tight">
-                                            {category.category}
-                                        </h3>
-                                        <span className="px-1 py-0.5 rounded-full bg-neutral-800/40 border border-neutral-700/30 text-[8px] font-bold poppins text-neutral-500 uppercase tracking-widest">
-                                            {category.items.length}
-                                        </span>
+                                    <div className="flex flex-col gap-2.5 mb-2.5">
+                                        <div className='flex items-center gap-2.5'>
+                                            <h3 className="text-base md:text-2xl font-semibold poppins text-white tracking-tight">
+                                                {category.category}
+                                            </h3>
+                                            <span className="px-1 py-0.5 rounded-full bg-neutral-800/40 border border-neutral-700/30 text-[8px] font-bold poppins text-neutral-500 uppercase tracking-widest">
+                                                {category.items.length}
+                                            </span>
+                                        </div>
+                                        <p
+                                            className="text-[12px] md:text-base poppins text-neutral-400 leading-relaxed font-medium">
+                                            {displayedCategories.map((dc) => (
+                                                <div key={dc.category}>
+                                                    {dc.description}
+                                                </div>
+                                            ))}
+                                        </p>
                                     </div>
                                     <div className="h-0.5 w-16 bg-linear-to-r from-neutral-600/60 via-neutral-600/30 to-transparent rounded-full" />
                                 </motion.div>

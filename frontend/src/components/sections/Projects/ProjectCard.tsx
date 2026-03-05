@@ -40,10 +40,8 @@ export const ProjectCard = ({ project }: { project: ProjectCardProps }) => {
                             alt={project.title + " mobile preview"}
                         />
                     )}
-
                     <div className="flex flex-col gap-2">
                         {project.desktopVid && shownProject === "desktopImage" ? (
-
                             <video
                                 src={project.desktopVid}
                                 autoPlay
