@@ -1,21 +1,11 @@
 import { BiLogoPostgresql, BiLogoTypescript } from "react-icons/bi";
 import { FaNode, FaReact } from "react-icons/fa6";
-import { IoLogoCss3 } from "react-icons/io5";
-import { RiJavascriptFill } from "react-icons/ri";
 import { RiTailwindCssFill } from "react-icons/ri";
-import { SiExpress, SiGithub, SiPostman, SiRender, SiVite } from "react-icons/si";
+import { SiExpress, SiGithub, SiNextdotjs, SiPostman, SiPrisma, SiRender, SiSupabase, SiVercel, SiVite } from "react-icons/si";
 import { VscVscodeInsiders } from "react-icons/vsc";
 import { FaGitAlt } from "react-icons/fa";
 import { AiFillDatabase } from "react-icons/ai";
-import { FaHtml5 } from "react-icons/fa6";
-import { SiJsonwebtokens } from "react-icons/si";
-import { TbApi } from "react-icons/tb";
 import { SiFramer, } from "react-icons/si";
-import { RiLockPasswordFill } from "react-icons/ri";
-import { MdOutlineSecurity, MdOutlineAdminPanelSettings } from "react-icons/md"; import { FaShieldHalved } from "react-icons/fa6";
-import { VscChecklist } from "react-icons/vsc";
-import { BiCookie } from "react-icons/bi";
-import { AiOutlineCloudUpload } from "react-icons/ai";
 
 interface TechStackItem {
     name: string;
@@ -37,16 +27,16 @@ const frontendItems: TechStackItem[] = [
         description: "Component-based UI",
     },
     {
+        name: "Next.js",
+        icon: <SiNextdotjs />,
+        color: "#000000",
+        description: "Production-grade React framework & SSR architecture",
+    },
+    {
         name: "TypeScript",
         icon: <BiLogoTypescript />,
         color: "#3178C6",
         description: "Static type safety",
-    },
-    {
-        name: "JavaScript",
-        icon: <RiJavascriptFill />,
-        color: "#F7DF1E",
-        description: "Dynamic client scripting",
     },
     {
         name: "Tailwind CSS",
@@ -55,23 +45,12 @@ const frontendItems: TechStackItem[] = [
         description: "Utility-first styling",
     },
     {
-        name: "CSS3",
-        icon: <IoLogoCss3 />,
-        color: "#1572B6",
-        description: "Modern layout system",
-    },
-    {
         name: "Framer Motion",
         icon: <SiFramer />,
         color: "#E11D48",
         description: "Interactive 3D animations",
     },
-    {
-        name: "HTML 5",
-        icon: <FaHtml5 />,
-        color: "#F16529",
-        description: "Semantic web structure",
-    },
+
 ];
 
 const backendItems: TechStackItem[] = [
@@ -94,64 +73,16 @@ const backendItems: TechStackItem[] = [
         description: "Relational data management",
     },
     {
+        name: "Prisma",
+        icon: <SiPrisma />,
+        color: "#2D3748",
+        description: "Next-gen Type-safe ORM & Automated Migrations",
+    },
+    {
         name: "TypeScript",
         icon: <BiLogoTypescript />,
         color: "#3178C6",
         description: "Robust backend logic",
-    },
-    {
-        name: "JWT",
-        icon: <SiJsonwebtokens />,
-        color: "#FB015B",
-        description: "Stateless secure authentication",
-    },
-    {
-        name: "Bcrypt",
-        icon: <RiLockPasswordFill />,
-        color: "#FFD700",
-        description: "Secure password hashing",
-    },
-    {
-        name: "Joi",
-        icon: <VscChecklist />,
-        color: "#E91E63",
-        description: "Schema data validation",
-    },
-    {
-        name: "Helmet",
-        icon: <FaShieldHalved />,
-        color: "#A9A9A9",
-        description: "HTTP header security",
-    },
-    {
-        name: "Express-Rate-Limit",
-        icon: <MdOutlineSecurity />,
-        color: "#FF4444",
-        description: "API brute-force protection",
-    },
-    {
-        name: "RBAC",
-        icon: <MdOutlineAdminPanelSettings />,
-        color: "#FF5733",
-        description: "Role-based security",
-    },
-    {
-        name: "Multer",
-        icon: <AiOutlineCloudUpload />,
-        color: "#3178C6",
-        description: "Easy file uploads",
-    },
-    {
-        name: "Cookie Parser",
-        icon: <BiCookie />,
-        color: "#6F4E37",
-        description: "Secure cookie handling",
-    },
-    {
-        name: "RESTful API",
-        icon: <TbApi />,
-        color: "#007ACC",
-        description: "Standardized data endpoints",
     },
 ];
 
@@ -197,6 +128,18 @@ const toolsItems: TechStackItem[] = [
         icon: <AiFillDatabase />,
         color: "#44D62C",
         description: "Serverless cloud database",
+    },
+    {
+        name: "Supabase",
+        icon: <SiSupabase />,
+        color: "#3ECF8E",
+        description: "Open-source Firebase alternative with PostgreSQL power",
+    },
+    {
+        name: "Vercel",
+        icon: <SiVercel />,
+        color: "#000000",
+        description: "Cloud orchestration, CI/CD, and Edge deployments",
     },
     {
         name: "Vite",
